@@ -1,63 +1,63 @@
-# Dokumentation
+# Documentation
 
-Diese Verzeichnis enthält die Dokumentation für scVAE-Annotator.
+This directory contains the documentation for scVAE-Annotator.
 
-## Schnellstart
+## Quick Start
 
 ### Installation
 
 ```bash
-# Repository klonen
-git clone https://github.com/yourusername/scVAE-Annotator.git
+# Clone repository
+git clone https://github.com/or4k2l/scVAE-Annotator.git
 cd scVAE-Annotator
 
-# Abhängigkeiten installieren
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Verwendung
+### Usage
 
 ```python
 from scvae_annotator import create_optimized_config, run_annotation_pipeline
 
-# Optimierte Konfiguration erstellen
+# Create optimized configuration
 config = create_optimized_config()
 
-# Pipeline ausführen
+# Run pipeline
 results = run_annotation_pipeline(config)
 ```
 
-## Dokumentationsstruktur
+## Documentation Structure
 
-### Haupt-Dokumentation
+### Main Documentation
 
-- [README.md](../README.md) - Hauptprojektübersicht und Schnellstart
-- [EXAMPLES.md](../EXAMPLES.md) - Detaillierte Verwendungsbeispiele
-- [ANALYSIS_REPORT.md](../ANALYSIS_REPORT.md) - Vollständiger Analysebericht für PBMC 10k
-- [VALIDATION_REPORT.md](../VALIDATION_REPORT.md) - Cross-Dataset Validierung
-- [TECHNICAL_APPENDIX.md](../TECHNICAL_APPENDIX.md) - Detaillierte technische Metriken
+- [README.md](../README.md) - Main project overview and quick start
+- [EXAMPLES.md](../EXAMPLES.md) - Detailed usage examples
+- [ANALYSIS_REPORT.md](../ANALYSIS_REPORT.md) - Complete analysis report for PBMC 10k
+- [VALIDATION_REPORT.md](../VALIDATION_REPORT.md) - Cross-dataset validation
+- [TECHNICAL_APPENDIX.md](../TECHNICAL_APPENDIX.md) - Detailed technical metrics
 
-### Weitere Dokumentation
+### Additional Documentation
 
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Anleitung für Beitragende
-- [LICENSE](../LICENSE) - Lizenzinformationen
+- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contributing guidelines
+- [LICENSE](../LICENSE) - License information
 
-## Daten
+## Data
 
-- [data/README.md](../data/README.md) - Anleitung zur Datenvorbereitung
-- [data/prepare_pbmc3k.py](../data/prepare_pbmc3k.py) - PBMC 3k Vorbereitungsskript
+- [data/README.md](../data/README.md) - Data preparation guide
+- [data/prepare_pbmc3k.py](../data/prepare_pbmc3k.py) - PBMC 3k preparation script
 
-## Visualisierungen
+## Visualizations
 
-- [figures/README.md](../figures/README.md) - Übersicht über alle Visualisierungen
+- [figures/README.md](../figures/README.md) - Overview of all visualizations
 
-## API-Referenz
+## API Reference
 
-### Hauptkomponenten
+### Main Components
 
 #### Config
 
-Konfigurationsklasse für die Pipeline:
+Configuration class for the pipeline:
 
 ```python
 from scvae_annotator import Config
@@ -74,7 +74,7 @@ config = Config(
 
 #### create_optimized_config()
 
-Erstellt optimierte Konfiguration basierend auf den Ergebnissen der Hyperparameter-Optimierung:
+Creates optimized configuration based on hyperparameter optimization results:
 
 ```python
 config = create_optimized_config()
@@ -82,35 +82,35 @@ config = create_optimized_config()
 
 #### run_annotation_pipeline()
 
-Führt die vollständige Annotations-Pipeline aus:
+Runs the complete annotation pipeline:
 
 ```python
 results = run_annotation_pipeline(config)
 ```
 
-### Metriken
+### Metrics
 
-Die Pipeline liefert folgende Metriken:
+The pipeline provides the following metrics:
 
-- **Accuracy**: Gesamtgenauigkeit der Annotation
-- **Precision/Recall/F1**: Pro-Klassen-Metriken
-- **Confidence Scores**: Kalibrierte Konfidenzwerte
+- **Accuracy**: Overall annotation accuracy
+- **Precision/Recall/F1**: Per-class metrics
+- **Confidence Scores**: Calibrated confidence values
 - **Clustering Metrics**: NMI, ARI, Silhouette Score
 
-## Erweiterte Themen
+## Advanced Topics
 
-### Eigene Daten
+### Custom Data
 
-Siehe [EXAMPLES.md](../EXAMPLES.md) für Anleitungen zur Verwendung eigener Daten.
+See [EXAMPLES.md](../EXAMPLES.md) for guides on using your own data.
 
-### Hyperparameter-Tuning
+### Hyperparameter Tuning
 
-Die Pipeline verwendet Optuna für automatisches Hyperparameter-Tuning. 
-Siehe [TECHNICAL_APPENDIX.md](../TECHNICAL_APPENDIX.md) für Details.
+The pipeline uses Optuna for automatic hyperparameter tuning. 
+See [TECHNICAL_APPENDIX.md](../TECHNICAL_APPENDIX.md) for details.
 
-### Batch-Korrektur
+### Batch Correction
 
-Harmony-Integration für Batch-Effekt-Korrektur:
+Harmony integration for batch effect correction:
 
 ```python
 config = Config(
@@ -121,41 +121,41 @@ config = Config(
 
 ## Troubleshooting
 
-### Häufige Probleme
+### Common Issues
 
-**Problem**: `ModuleNotFoundError: No module named 'scvae_annotator'`
+**Issue**: `ModuleNotFoundError: No module named 'scvae_annotator'`
 
-**Lösung**: Stellen Sie sicher, dass alle Abhängigkeiten installiert sind:
+**Solution**: Make sure all dependencies are installed:
 ```bash
 pip install -r requirements.txt
 ```
 
-**Problem**: GPU-Fehler
+**Issue**: GPU errors
 
-**Lösung**: Die Pipeline funktioniert auch mit CPU. PyTorch erkennt automatisch verfügbare Hardware.
+**Solution**: The pipeline works with CPU. PyTorch automatically detects available hardware.
 
-**Problem**: Speicherfehler bei großen Datensätzen
+**Issue**: Memory errors with large datasets
 
-**Lösung**: Reduzieren Sie `target_genes` oder verwenden Sie Batch-Processing:
+**Solution**: Reduce `target_genes` or use batch processing:
 ```python
 config = Config(target_genes=1000)
 ```
 
 ## Community
 
-- **Issues**: Melden Sie Bugs oder Feature-Requests auf GitHub
-- **Discussions**: Diskussionen und Fragen im GitHub Discussions Bereich
-- **Pull Requests**: Beiträge sind willkommen! Siehe [CONTRIBUTING.md](../CONTRIBUTING.md)
+- **Issues**: Report bugs or feature requests on GitHub
+- **Discussions**: Questions and discussions in GitHub Discussions
+- **Pull Requests**: Contributions are welcome! See [CONTRIBUTING.md](../CONTRIBUTING.md)
 
-## Zitate
+## Citations
 
-Wenn Sie scVAE-Annotator in Ihrer Forschung verwenden, zitieren Sie bitte:
+If you use scVAE-Annotator in your research, please cite:
 
 ```bibtex
 @software{scvae_annotator,
   title = {scVAE-Annotator: Automated Cell Type Annotation for scRNA-seq},
   author = {scVAE-Annotator Team},
   year = {2024},
-  url = {https://github.com/yourusername/scVAE-Annotator}
+  url = {https://github.com/or4k2l/scVAE-Annotator}
 }
 ```

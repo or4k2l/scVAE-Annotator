@@ -1,45 +1,45 @@
 # CI/CD Setup
 
-Dieses Dokument beschreibt das CI/CD-Setup für scVAE-Annotator.
+This document describes the CI/CD setup for scVAE-Annotator.
 
 ## GitHub Actions Workflows
 
 ### 1. Tests (`tests.yml`)
 
-Läuft bei jedem Push/PR auf `main` und `develop` Branches.
+Runs on every push/PR to `main` and `develop` branches.
 
-**Matrix-Tests:**
-- **Betriebssysteme**: Ubuntu, macOS, Windows
-- **Python-Versionen**: 3.8, 3.9, 3.10, 3.11, 3.12
-- **Wöchentlicher Cron-Job**: Sonntags um 00:00 UTC
+**Matrix Tests:**
+- **Operating Systems**: Ubuntu, macOS, Windows
+- **Python Versions**: 3.8, 3.9, 3.10, 3.11, 3.12
+- **Weekly Cron Job**: Sundays at 00:00 UTC
 
-**Schritte:**
-1. Checkout Code
-2. Python Setup mit Cache
-3. System-Abhängigkeiten installieren (HDF5)
-4. Python-Abhängigkeiten installieren
-5. Tests mit Coverage ausführen
-6. Coverage zu Codecov hochladen
-7. HTML Coverage-Report als Artifact
+**Steps:**
+1. Checkout code
+2. Python setup with cache
+3. Install system dependencies (HDF5)
+4. Install Python dependencies
+5. Run tests with coverage
+6. Upload coverage to Codecov
+7. HTML coverage report as artifact
 
-**Kommandos:**
+**Commands:**
 ```bash
 pytest tests/ -v --cov=. --cov-report=xml --cov-report=html
 ```
 
 ### 2. Code Quality (`lint.yml`)
 
-Läuft bei jedem Push/PR auf `main` und `develop` Branches.
+Runs on every push/PR to `main` and `develop` branches.
 
 **Checks:**
-- **Black**: Code-Formatierung
-- **isort**: Import-Sortierung
-- **Flake8**: Style-Guide Enforcement (PEP 8)
-- **Pylint**: Code-Analyse und Qualität
-- **Bandit**: Security-Checks
-- **Safety**: Dependency-Vulnerability-Checks
+- **Black**: Code formatting
+- **isort**: Import sorting
+- **Flake8**: Style guide enforcement (PEP 8)
+- **Pylint**: Code analysis and quality
+- **Bandit**: Security checks
+- **Safety**: Dependency vulnerability checks
 
-**Kommandos:**
+**Commands:**
 ```bash
 black --check --diff .
 isort --check-only --diff .
@@ -51,22 +51,22 @@ safety check
 
 ### 3. Documentation (`docs.yml`)
 
-Läuft bei Push/PR auf `main` Branch.
+Runs on push/PR to `main` branch.
 
 **Checks:**
-- Markdown-Links validieren
-- README-Struktur prüfen
-- Sphinx-Build (geplant)
+- Validate markdown links
+- Check README structure
+- Sphinx build (planned)
 
 ### 4. Release (`release.yml`)
 
-Läuft bei Version-Tags (`v*.*.*`).
+Runs on version tags (`v*.*.*`).
 
-**Schritte:**
-1. Build Python Package
-2. Package-Qualität prüfen
-3. GitHub Release erstellen
-4. (Optional) PyPI Upload
+**Steps:**
+1. Build Python package
+2. Check package quality
+3. Create GitHub release
+4. (Optional) PyPI upload
 
 **Trigger:**
 ```bash
@@ -76,7 +76,7 @@ git push origin v0.1.0
 
 ## Badges
 
-Füge diese Badges zum README hinzu:
+Add these badges to the README:
 
 ```markdown
 [![Python Tests](https://github.com/or4k2l/scVAE-Annotator/actions/workflows/tests.yml/badge.svg)](https://github.com/or4k2l/scVAE-Annotator/actions/workflows/tests.yml)
@@ -86,35 +86,35 @@ Füge diese Badges zum README hinzu:
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ```
 
-## Lokale CI-Simulation
+## Local CI Simulation
 
-### Mit run_tests.sh
+### With run_tests.sh
 
 ```bash
-# Vollständige CI-Simulation
+# Full CI simulation
 ./run_tests.sh --full
 
-# Nur Linting
+# Linting only
 ./run_tests.sh --lint
 
-# Auto-Fix
+# Auto-fix
 ./run_tests.sh --fix
 ```
 
-### Mit Make
+### With Make
 
 ```bash
 # Tests
 make test          # Standard
-make test-quick    # Schnell
-make test-full     # Vollständig
+make test-quick    # Quick
+make test-full     # Full
 
 # Linting
-make lint          # Prüfen
-make lint-fix      # Auto-Fix
+make lint          # Check
+make lint-fix      # Auto-fix
 ```
 
-### Manuell
+### Manual
 
 ```bash
 # Tests
@@ -136,42 +136,42 @@ bandit -r .
 safety check
 ```
 
-## Coverage-Ziele
+## Coverage Goals
 
-- **Minimum**: 70% Gesamt-Coverage
-- **Ziel**: 80%+ Gesamt-Coverage
-- **Kritische Funktionen**: 100% Coverage
+- **Minimum**: 70% overall coverage
+- **Target**: 80%+ overall coverage
+- **Critical Functions**: 100% coverage
 
-### Coverage anzeigen
+### View Coverage
 
 ```bash
 # Terminal
 pytest --cov=. --cov-report=term-missing
 
-# HTML-Report
+# HTML report
 pytest --cov=. --cov-report=html
 open htmlcov/index.html
 
-# XML für CI
+# XML for CI
 pytest --cov=. --cov-report=xml
 ```
 
 ## Pre-Commit Hooks (Optional)
 
-Für automatische Checks vor jedem Commit:
+For automatic checks before each commit:
 
 ```bash
-# pre-commit installieren
+# Install pre-commit
 pip install pre-commit
 
-# Hooks aktivieren
+# Activate hooks
 pre-commit install
 
-# Manuell ausführen
+# Run manually
 pre-commit run --all-files
 ```
 
-`.pre-commit-config.yaml` erstellen:
+Create `.pre-commit-config.yaml`:
 
 ```yaml
 repos:
@@ -195,19 +195,19 @@ repos:
 
 ### PyPI Release
 
-Nach erfolgreichem Release-Workflow:
+After successful release workflow:
 
-1. Package wird automatisch gebaut
-2. GitHub Release wird erstellt
-3. (Optional) Upload zu PyPI
+1. Package is automatically built
+2. GitHub release is created
+3. (Optional) Upload to PyPI
 
-PyPI Token hinzufügen:
+Add PyPI token:
 ```bash
 # GitHub Repository Settings > Secrets
 PYPI_API_TOKEN=<your-token>
 ```
 
-### Docker Build (Geplant)
+### Docker Build (Planned)
 
 ```yaml
 # .github/workflows/docker.yml
@@ -228,9 +228,9 @@ jobs:
 
 ## Monitoring
 
-### Status-Checks
+### Status Checks
 
-Alle PRs müssen folgende Checks bestehen:
+All PRs must pass the following checks:
 
 - ✅ Tests (Ubuntu, Python 3.10)
 - ✅ Linting (Black, Flake8, Pylint)
@@ -238,51 +238,51 @@ Alle PRs müssen folgende Checks bestehen:
 
 ### Branch Protection
 
-Aktiviere Branch Protection für `main`:
+Enable branch protection for `main`:
 
 1. GitHub Repository > Settings > Branches
-2. Add Rule für `main`
-3. Aktiviere:
+2. Add rule for `main`
+3. Enable:
    - Require status checks before merging
    - Require branches to be up to date
-   - Tests und Lint als erforderlich markieren
+   - Mark tests and lint as required
 
 ## Troubleshooting
 
-### Workflow-Fehler
+### Workflow Errors
 
-**Problem**: Tests schlagen auf Windows fehl
+**Problem**: Tests fail on Windows
 
-**Lösung**: Prüfe Pfad-Separatoren (`/` vs `\`)
+**Solution**: Check path separators (`/` vs `\`)
 
-**Problem**: Coverage-Upload schlägt fehl
+**Problem**: Coverage upload fails
 
-**Lösung**: Codecov Token in Repository Secrets hinzufügen
+**Solution**: Add Codecov token to repository secrets
 
-**Problem**: Dependency-Installation dauert zu lange
+**Problem**: Dependency installation takes too long
 
-**Lösung**: Nutze `cache: 'pip'` in setup-python Action
+**Solution**: Use `cache: 'pip'` in setup-python action
 
-### Lokale Fehler
+### Local Errors
 
-**Problem**: `pytest` nicht gefunden
+**Problem**: `pytest` not found
 
-**Lösung**: 
+**Solution**: 
 ```bash
 pip install pytest pytest-cov
 ```
 
-**Problem**: Import-Fehler in Tests
+**Problem**: Import errors in tests
 
-**Lösung**:
+**Solution**:
 ```bash
 pip install -r requirements.txt
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 ```
 
-## Weitere Ressourcen
+## Further Resources
 
-- [GitHub Actions Dokumentation](https://docs.github.com/en/actions)
-- [pytest Dokumentation](https://docs.pytest.org/)
-- [Coverage.py Dokumentation](https://coverage.readthedocs.io/)
-- [Codecov Dokumentation](https://docs.codecov.com/)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [pytest Documentation](https://docs.pytest.org/)
+- [Coverage.py Documentation](https://coverage.readthedocs.io/)
+- [Codecov Documentation](https://docs.codecov.com/)

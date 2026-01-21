@@ -1,34 +1,34 @@
 # Examples
 
-Dieses Verzeichnis enthält Beispiele für die Verwendung von scVAE-Annotator.
+This directory contains examples for using scVAE-Annotator.
 
-## Verfügbare Beispiele
+## Available Examples
 
 ### 1. Basic Example (`basic_example.py`)
 
-Vollständiges End-to-End Beispiel mit dem PBMC 10k Datensatz:
+Complete end-to-end example with the PBMC 10k dataset:
 
 ```bash
 python examples/basic_example.py
 ```
 
-Dieses Beispiel zeigt:
-- Laden des PBMC 10k Datensatzes
-- Konfiguration der optimierten Pipeline
-- Ausführung der vollständigen Annotation
-- Auswertung der Ergebnisse
+This example demonstrates:
+- Loading the PBMC 10k dataset
+- Configuring the optimized pipeline
+- Running the complete annotation
+- Evaluating results
 
 ### 2. CLI Examples (`cli_examples.sh`)
 
-Kommandozeilen-Beispiele für verschiedene Anwendungsfälle:
+Command-line examples for various use cases:
 
 ```bash
-bash examples/cli_examples.sh  # Zeigt verfügbare Befehle
+bash examples/cli_examples.sh  # Shows available commands
 ```
 
-## Eigene Daten verwenden
+## Using Your Own Data
 
-### Aus H5AD-Datei:
+### From H5AD File:
 
 ```python
 from scvae_annotator import Config, run_annotation_pipeline
@@ -43,42 +43,42 @@ config = Config(
 results = run_annotation_pipeline(config)
 ```
 
-### Aus Scanpy AnnData:
+### From Scanpy AnnData:
 
 ```python
 import scanpy as sc
 from scvae_annotator import Config, run_annotation_pipeline
 
-# Laden Sie Ihre Daten
+# Load your data
 adata = sc.read_h5ad('your_data.h5ad')
-# oder: adata = sc.read_10x_mtx('filtered_feature_bc_matrix/')
+# or: adata = sc.read_10x_mtx('filtered_feature_bc_matrix/')
 
 config = Config(
-    data_path=None,  # Nicht benötigt wenn adata direkt übergeben wird
+    data_path=None,  # Not needed when passing adata directly
     output_dir='results'
 )
 
 results = run_annotation_pipeline(config, adata=adata)
 ```
 
-## Erweiterte Beispiele
+## Advanced Examples
 
-Siehe [EXAMPLES.md](../EXAMPLES.md) im Hauptverzeichnis für:
-- Hyperparameter-Optimierung
-- Batch-Korrektur mit Harmony
-- Benutzerdefinierte Klassifikatoren
-- Visualisierungen und Analysen
+See [EXAMPLES.md](../EXAMPLES.md) in the main directory for:
+- Hyperparameter optimization
+- Batch correction with Harmony
+- Custom classifiers
+- Visualizations and analysis
 
-## Datensets
+## Datasets
 
-Beispiel-Datensätze können heruntergeladen werden von:
-- [10x Genomics public datasets](https://www.10xgenomics.com/resources/datasets) (z.B. PBMC 10k)
+Example datasets can be downloaded from:
+- [10x Genomics public datasets](https://www.10xgenomics.com/resources/datasets) (e.g., PBMC 10k)
 - [Single Cell Portal](https://singlecell.broadinstitute.org/)
 
-### PBMC 3k Vorbereitung:
+### PBMC 3k Preparation:
 
 ```bash
 python data/prepare_pbmc3k.py
 ```
 
-Dies bereitet den PBMC 3k Datensatz für die Validierung vor.
+This prepares the PBMC 3k dataset for validation.

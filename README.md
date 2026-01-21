@@ -197,10 +197,10 @@ For questions or issues, please open an issue on GitHub.
 
 ## 🙏 Acknowledgments
 
-- [Scanpy](https://scanpy.readthedocs.io/) für Single-Cell-Analyse
-- [Optuna](https://optuna.org/) für Hyperparameter-Optimierung
-- [PyTorch](https://pytorch.org/) für Deep Learning
-- 10x Genomics für Beispieldaten
+- [Scanpy](https://scanpy.readthedocs.io/) for single-cell analysis
+- [Optuna](https://optuna.org/) for hyperparameter optimization
+- [PyTorch](https://pytorch.org/) for deep learning
+- 10x Genomics for example data
 
 ## 📚 Citation
 

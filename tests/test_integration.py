@@ -1,5 +1,5 @@
 """
-Integration tests für die komplette Pipeline.
+Integration tests for the complete pipeline.
 """
 
 import pytest

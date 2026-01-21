@@ -1,71 +1,71 @@
 # Tests
 
-Dieses Verzeichnis enthält alle Tests für scVAE-Annotator.
+This directory contains all tests for scVAE-Annotator.
 
-## Test-Struktur
+## Test Structure
 
 ```
 tests/
 ├── __init__.py
-├── test_annotator.py       # Config und Pipeline Tests
-├── test_model.py            # VAE Architektur Tests
-├── test_preprocessing.py    # Preprocessing-Funktionen Tests
+├── test_annotator.py       # Config and Pipeline Tests
+├── test_model.py            # VAE Architecture Tests
+├── test_preprocessing.py    # Preprocessing Function Tests
 └── test_integration.py      # End-to-End Integration Tests
 ```
 
-## Tests ausführen
+## Running Tests
 
-### Alle Tests
+### All Tests
 
 ```bash
 pytest tests/
 ```
 
-### Mit Coverage
+### With Coverage
 
 ```bash
 pytest tests/ --cov=. --cov-report=html
 ```
 
-### Schnelle Tests (ohne slow marker)
+### Quick Tests (without slow marker)
 
 ```bash
 pytest tests/ -m "not slow"
 ```
 
-### Spezifische Test-Datei
+### Specific Test File
 
 ```bash
 pytest tests/test_annotator.py -v
 ```
 
-### Mit Make
+### With Make
 
 ```bash
 make test              # Standard Tests
-make test-quick        # Nur schnelle Tests
-make test-full         # Alle Tests mit Coverage
+make test-quick        # Quick Tests Only
+make test-full         # All Tests with Coverage
 ```
 
-### Mit run_tests.sh Skript
+### With run_tests.sh Script
 
 ```bash
 ./run_tests.sh              # Standard
-./run_tests.sh --quick      # Schnelle Tests
-./run_tests.sh --full       # Vollständige Suite
-./run_tests.sh --lint       # Nur Linting
+./run_tests.sh --quick      # Quick Tests
+./run_tests.sh --full       # Full Suite
+./run_tests.sh --lint       # Linting Only
 ./run_tests.sh --fix        # Auto-fix Linting
 ```
 
-## Test-Kategorien
+## Test Categories
 
 ### Unit Tests (`test_annotator.py`, `test_model.py`)
 
-Testen einzelne Funktionen und Klassen isoliert:
+Test individual functions and classes in isolation:
 
-- Config-Initialisierung
-- VAE-Architektur
-- Modell-Komponenten
+- Config initialization
+- VAE architecture
+- Model components
 
 ```bash
 pytest tests/test_annotator.py tests/test_model.py -v
@@ -73,12 +73,12 @@ pytest tests/test_annotator.py tests/test_model.py -v
 
 ### Preprocessing Tests (`test_preprocessing.py`)
 
-Testen Datenverarbeitungs-Pipeline:
+Test data processing pipeline:
 
-- Filtern von Zellen und Genen
-- Normalisierung
-- Log-Transformation
-- HVG-Selektion
+- Cell and gene filtering
+- Normalization
+- Log transformation
+- HVG selection
 - PCA, UMAP, Clustering
 
 ```bash
@@ -87,13 +87,13 @@ pytest tests/test_preprocessing.py -v
 
 ### Integration Tests (`test_integration.py`)
 
-Testen die komplette Pipeline End-to-End:
+Test the complete pipeline end-to-end:
 
-- Vollständige Pipeline mit synthetischen Daten
-- Output-Validierung
-- Fehlerbehandlung
+- Full pipeline with synthetic data
+- Output validation
+- Error handling
 
-⚠️ **Hinweis**: Integration-Tests sind als "slow" markiert und werden standardmäßig übersprungen.
+⚠️ **Note**: Integration tests are marked as "slow" and are skipped by default.
 
 ```bash
 pytest tests/test_integration.py -v -m "slow"
@@ -101,46 +101,46 @@ pytest tests/test_integration.py -v -m "slow"
 
 ## Test Markers
 
-Tests können mit Markern versehen werden:
+Tests can be marked with:
 
-- `@pytest.mark.slow` - Langsame Tests (>10 Sekunden)
-- `@pytest.mark.integration` - Integration Tests
-- `@pytest.mark.unit` - Unit Tests
+- `@pytest.mark.slow` - Slow tests (>10 seconds)
+- `@pytest.mark.integration` - Integration tests
+- `@pytest.mark.unit` - Unit tests
 
-### Marker verwenden
+### Using Markers
 
 ```bash
-# Nur Unit Tests
+# Unit tests only
 pytest -m unit
 
-# Ohne langsame Tests
+# Without slow tests
 pytest -m "not slow"
 
-# Nur Integration Tests
+# Integration tests only
 pytest -m integration
 ```
 
 ## Code Coverage
 
-### Coverage Report generieren
+### Generate Coverage Report
 
 ```bash
 pytest --cov=. --cov-report=html
 ```
 
-Der Report wird in `htmlcov/index.html` gespeichert.
+The report will be saved in `htmlcov/index.html`.
 
-### Coverage im Terminal
+### Coverage in Terminal
 
 ```bash
 pytest --cov=. --cov-report=term-missing
 ```
 
-### Coverage-Ziel
+### Coverage Goal
 
-Angestrebte Coverage: **≥ 80%**
+Target Coverage: **≥ 80%**
 
-Aktuelle Coverage anzeigen:
+View current coverage:
 
 ```bash
 coverage report
@@ -148,77 +148,77 @@ coverage report
 
 ## Fixtures
 
-Verfügbare Pytest Fixtures (in `test_integration.py`):
+Available Pytest Fixtures (in `test_integration.py`):
 
 ### `temp_output_dir`
 
-Temporäres Verzeichnis für Test-Outputs:
+Temporary directory for test outputs:
 
 ```python
 def test_example(temp_output_dir):
-    # temp_output_dir ist ein temporäres Verzeichnis
-    # wird nach dem Test automatisch gelöscht
+    # temp_output_dir is a temporary directory
+    # automatically deleted after the test
     pass
 ```
 
 ### `synthetic_adata`
 
-Synthetische AnnData für Tests:
+Synthetic AnnData for tests:
 
 ```python
 def test_example(synthetic_adata):
-    # synthetic_adata ist ein AnnData Objekt mit 200 Zellen, 100 Genen
+    # synthetic_adata is an AnnData object with 200 cells, 100 genes
     assert synthetic_adata.n_obs == 200
     assert synthetic_adata.n_vars == 100
 ```
 
-## Kontinuierliche Integration (CI)
+## Continuous Integration (CI)
 
 ### GitHub Actions
 
-Tests werden automatisch bei jedem Push/PR ausgeführt:
+Tests run automatically on every push/PR:
 
-- **tests.yml**: Läuft auf Ubuntu, macOS, Windows mit Python 3.8-3.12
-- **lint.yml**: Code-Qualitätschecks (Black, Flake8, Pylint, etc.)
-- **docs.yml**: Dokumentations-Validierung
+- **tests.yml**: Runs on Ubuntu, macOS, Windows with Python 3.8-3.12
+- **lint.yml**: Code quality checks (Black, Flake8, Pylint, etc.)
+- **docs.yml**: Documentation validation
 
-### Lokale CI-Simulation
+### Local CI Simulation
 
 ```bash
-# Simuliere GitHub Actions lokal
+# Simulate GitHub Actions locally
 ./run_tests.sh --full
 make lint
 ```
 
 ## Troubleshooting
 
-### Import-Fehler
+### Import Errors
 
-Stelle sicher, dass das Paket installiert ist:
+Ensure the package is installed:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Timeout-Fehler
+### Timeout Errors
 
-Erhöhe das Timeout für langsame Tests:
+Increase timeout for slow tests:
 
 ```bash
 pytest --timeout=60
 ```
 
-### Memory-Fehler bei großen Tests
+### Memory Errors with Large Tests
 
-Reduziere parallele Workers:
+Reduce parallel workers:
 
 ```bash
-pytest -n 2  # Nur 2 parallele Prozesse
+pytest -n 2  # Only 2 parallel processes
 ```
 
-### Coverage nicht gefunden
+### Coverage Not Found
 
-Installiere Coverage-Tools:
+Install coverage tools:
 
 ```bash
 pip install pytest-cov coverage[toml]
@@ -226,45 +226,45 @@ pip install pytest-cov coverage[toml]
 
 ## Best Practices
 
-### Neue Tests schreiben
+### Writing New Tests
 
-1. **Dateinamen**: `test_*.py`
-2. **Funktionsnamen**: `test_*`
-3. **Docstrings**: Beschreibe was getestet wird
-4. **Assertions**: Verwende klare Assertions
-5. **Fixtures**: Nutze Fixtures für Setup/Teardown
+1. **File names**: `test_*.py`
+2. **Function names**: `test_*`
+3. **Docstrings**: Describe what is tested
+4. **Assertions**: Use clear assertions
+5. **Fixtures**: Use fixtures for setup/teardown
 
-Beispiel:
+Example:
 
 ```python
 def test_config_initialization():
-    """Test dass Config mit Defaults initialisiert wird."""
+    """Test that Config initializes with defaults."""
     config = Config()
     assert config.target_genes == 2000
     assert config.n_neighbors == 30
 ```
 
-### Test-Isolation
+### Test Isolation
 
-Jeder Test sollte unabhängig sein:
+Each test should be independent:
 
-- Keine Abhängigkeiten zwischen Tests
-- Temporäre Dateien aufräumen
-- Fixture für Setup verwenden
+- No dependencies between tests
+- Clean up temporary files
+- Use fixtures for setup
 
 ### Performance
 
-- Markiere langsame Tests mit `@pytest.mark.slow`
-- Verwende Mock-Objekte wo möglich
-- Reduziere Datengrößen in Tests
+- Mark slow tests with `@pytest.mark.slow`
+- Use mock objects where possible
+- Reduce data sizes in tests
 
-## Zusätzliche Tools
+## Additional Tools
 
 ### pytest-xdist (Parallel Tests)
 
 ```bash
 pip install pytest-xdist
-pytest -n auto  # Automatische CPU-Anzahl
+pytest -n auto  # Automatic CPU count
 ```
 
 ### pytest-timeout (Timeout Protection)
@@ -278,11 +278,11 @@ pytest --timeout=30
 
 ```bash
 pip install pytest-watch
-ptw  # Läuft Tests automatisch bei Dateiänderungen
+ptw  # Runs tests automatically on file changes
 ```
 
-## Weitere Informationen
+## More Information
 
-- [pytest Dokumentation](https://docs.pytest.org/)
-- [Coverage.py Dokumentation](https://coverage.readthedocs.io/)
-- [GitHub Actions für Python](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python)
+- [pytest Documentation](https://docs.pytest.org/)
+- [Coverage.py Documentation](https://coverage.readthedocs.io/)
+- [GitHub Actions for Python](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python)

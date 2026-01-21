@@ -1,5 +1,5 @@
 """
-Tests für VAE Model Komponenten.
+Tests for VAE Model Components.
 """
 
 import pytest

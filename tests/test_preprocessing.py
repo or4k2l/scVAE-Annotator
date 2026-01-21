@@ -1,5 +1,5 @@
 """
-Tests für Preprocessing-Funktionen.
+Tests for Preprocessing Functions.
 """
 
 import pytest

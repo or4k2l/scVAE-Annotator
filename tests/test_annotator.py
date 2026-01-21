@@ -1,5 +1,5 @@
 """
-Tests für scVAE-Annotator Pipeline.
+Tests for scVAE-Annotator Pipeline.
 """
 
 import pytest

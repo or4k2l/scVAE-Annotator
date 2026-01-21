@@ -7,10 +7,10 @@ An optimized pipeline for automated cell type annotation using:
 - Hyperparameter optimization with Optuna
 - Calibrated confidence scoring
 
-Hinweis: Die Hauptimplementierung befindet sich in scvae_annotator.py im Root-Verzeichnis.
-Dieses Paket dient als Struktur für zukünftige Modularisierung.
+Note: Main implementation is located in scvae_annotator.py in the root directory.
+This package serves as a structure for future modularization.
 
-Verwendung:
+Usage:
     from scvae_annotator import create_optimized_config, run_annotation_pipeline
     
     config = create_optimized_config()
