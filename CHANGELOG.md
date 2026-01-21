@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-01-21
+
+### Changed
+
+#### Improved "Out-of-the-Box" Experience
+- **examples/basic_example.py**: Verbesserte Fehlermeldungen und Import-Logik
+  - Klarere Hinweise auf `pip install -e .` als Hauptinstallationsmethode
+  - Flexiblere SCIPY_ARRAY_API Empfehlungen (sowohl 0 als auch 1)
+  - Entfernung der PYTHONPATH-Workarounds zugunsten der Package-Installation
+
+- **TROUBLESHOOTING.md**: Erweiterte SciPy Array API Dokumentation
+  - Dokumentation beider SCIPY_ARRAY_API Werte (0 und 1)
+  - Erklärung, dass der korrekte Wert von der spezifischen Umgebung abhängt
+  - Schritt-für-Schritt-Anleitung zum Testen beider Optionen
+
+- **README.md** und **examples/README.md**: Konsistente Aktualisierungen
+  - Einheitliche Hinweise auf SCIPY_ARRAY_API Flexibilität
+  - Verbesserte Installationsanweisungen
+
+### Motivation
+Diese Änderungen basieren auf Nutzerfeedback zur weiteren Verbesserung der Benutzerfreundlichkeit:
+- Eliminierung von manuellen Workarounds in Beispielskripten
+- Berücksichtigung verschiedener scipy/numpy Versionen in unterschiedlichen Umgebungen
+- Fokus auf `pip install -e .` als primäre und einfachste Installationsmethode
+
 ## [0.1.0] - 2024
 
 ### Added

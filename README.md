@@ -63,14 +63,14 @@ pip install -r requirements.txt
 ### Troubleshooting
 
 **SciPy Array API Issues:**
-If you encounter scipy array API compatibility warnings or errors, set this environment variable:
+If you encounter scipy array API compatibility warnings or errors, try setting this environment variable (the correct value depends on your scipy/numpy versions):
 ```bash
-export SCIPY_ARRAY_API=0
+export SCIPY_ARRAY_API=0  # or try =1 if 0 doesn't work
 ```
 
 Or add it to your shell profile (`~/.bashrc` or `~/.zshrc`):
 ```bash
-echo 'export SCIPY_ARRAY_API=0' >> ~/.bashrc
+echo 'export SCIPY_ARRAY_API=0' >> ~/.bashrc  # or =1
 source ~/.bashrc
 ```
 
@@ -83,7 +83,7 @@ source ~/.bashrc
 After installation, run the basic example:
 
 ```bash
-# Set environment variable if needed
+# Set environment variable if needed (try both 0 and 1 if you encounter scipy errors)
 export SCIPY_ARRAY_API=0
 
 # Run the example

@@ -9,8 +9,8 @@ This example demonstrates how to:
 
 Prerequisites:
 - Install the package: pip install -e .
-- Or ensure PYTHONPATH includes the project root
-- Set SCIPY_ARRAY_API=0 if encountering scipy compatibility issues
+- Set SCIPY_ARRAY_API=0 or SCIPY_ARRAY_API=1 if encountering scipy compatibility issues
+  (depending on your environment, try both if one doesn't work)
 """
 
 import os
@@ -28,10 +28,11 @@ except ImportError as e:
     print("\nPlease install the package first:")
     print("  cd /workspaces/scVAE-Annotator")
     print("  pip install -e .")
-    print("\nOr set PYTHONPATH:")
-    print("  export PYTHONPATH=/workspaces/scVAE-Annotator:$PYTHONPATH")
-    print("\nIf you see scipy array API errors, run:")
+    print("\nIf you see scipy array API errors, try:")
     print("  export SCIPY_ARRAY_API=0")
+    print("  or:")
+    print("  export SCIPY_ARRAY_API=1")
+    print("  (depends on your scipy/numpy versions)")
     sys.exit(1)
 
 
@@ -92,8 +93,10 @@ def main():
         print("   2. Installed all dependencies: pip install -r requirements.txt")
         print("   3. Internet connection (for data download)")
         print("   4. Sufficient disk space (~500MB)")
-        print("\nIf you see scipy errors, try:")
+        print("\nIf you see scipy errors, try both:")
         print("   export SCIPY_ARRAY_API=0")
+        print("   export SCIPY_ARRAY_API=1")
+        print("   (depends on your scipy/numpy versions)")
         sys.exit(1)
 
 

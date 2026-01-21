@@ -42,24 +42,34 @@ scipy.ndimage.label: object of type 'numpy.ndarray' cannot be interpreted as an 
 Or errors related to `scipy.sparse` and array API compatibility.
 
 **Solution:**
-Set the environment variable to disable the array API:
+Set the environment variable to configure the array API. **Try both values** - the correct one depends on your scipy/numpy/scanpy versions:
+
+**Option 1 (Most common):**
 ```bash
 export SCIPY_ARRAY_API=0
+```
+
+**Option 2 (If Option 1 doesn't work):**
+```bash
+export SCIPY_ARRAY_API=1
 ```
 
 To make this permanent, add it to your shell configuration:
 ```bash
 # For bash
-echo 'export SCIPY_ARRAY_API=0' >> ~/.bashrc
+echo 'export SCIPY_ARRAY_API=0' >> ~/.bashrc  # or =1 if that works better
 source ~/.bashrc
 
 # For zsh
-echo 'export SCIPY_ARRAY_API=0' >> ~/.zshrc
+echo 'export SCIPY_ARRAY_API=0' >> ~/.zshrc  # or =1 if that works better
 source ~/.zshrc
 ```
 
 **Why this happens:**
-SciPy 1.13+ introduced an experimental array API that may conflict with older NumPy/Scanpy versions. Disabling it ensures compatibility.
+SciPy 1.13+ introduced an experimental array API that may conflict with certain NumPy/Scanpy version combinations. The correct value (0 or 1) depends on your specific environment. If you encounter scipy errors:
+1. First try `SCIPY_ARRAY_API=0`
+2. If that doesn't work, try `SCIPY_ARRAY_API=1`
+3. The one that eliminates errors is the right choice for your setup
 
 ### CUDA/GPU Issues
 
@@ -166,7 +176,7 @@ pip install -e .
 **Checklist:**
 1. ✅ Package installed: `pip install -e .`
 2. ✅ Dependencies installed: `pip install -r requirements.txt`
-3. ✅ SCIPY_ARRAY_API set: `export SCIPY_ARRAY_API=0`
+3. ✅ SCIPY_ARRAY_API set: `export SCIPY_ARRAY_API=0` (or try =1 if errors persist)
 4. ✅ Internet connection available
 5. ✅ Sufficient disk space (~500MB)
 
@@ -199,8 +209,8 @@ Common commands for a fresh start:
 pip uninstall scvae-annotator -y
 pip install -e .
 
-# Set environment
-export SCIPY_ARRAY_API=0
+# Set environment (try both if one doesn't work)
+export SCIPY_ARRAY_API=0  # or =1
 
 # Run example
 python examples/basic_example.py

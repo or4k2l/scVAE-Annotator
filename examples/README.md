@@ -22,9 +22,9 @@ pip install -e .
 ```
 
 **SciPy Array API Warnings:**
-If you encounter scipy compatibility issues, set:
+If you encounter scipy compatibility issues, try setting (use the value that works for your environment):
 ```bash
-export SCIPY_ARRAY_API=0
+export SCIPY_ARRAY_API=0  # or try =1 if 0 doesn't work
 ```
 
 ## Available Examples
