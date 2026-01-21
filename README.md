@@ -1,111 +1,215 @@
 # scVAE-Annotator
 
-A deep learning-based tool for automated cell type annotation in single-cell RNA-sequencing data using Variational Autoencoders.
+**Advanced Single-Cell RNA-seq Annotation Pipeline with VAE and Automated Hyperparameter Optimization**
 
-## Overview
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-scVAE-Annotator leverages the power of Variational Autoencoders (VAEs) to provide robust and accurate cell type annotation for single-cell RNA-seq (scRNA-seq) datasets. The tool combines dimensionality reduction, clustering, and marker gene analysis to automatically identify and annotate cell types in complex biological samples.
+## 🎯 Overview
 
-## Features
+scVAE-Annotator is an optimized pipeline for automated cell type annotation in single-cell RNA-seq data. It combines:
 
-- **Automated Cell Type Annotation**: Leverages VAE-based deep learning for accurate cell type identification
-- **Scalable Processing**: Efficiently handles large-scale scRNA-seq datasets
-- **Flexible Input**: Supports multiple input formats (CSV, TSV, H5AD, MTX)
-- **Comprehensive Visualization**: Built-in plotting functions for quality control and results interpretation
-- **Marker Gene Analysis**: Integrated tools for identifying and validating cell type markers
-- **Pre-trained Models**: Includes pre-trained models for common tissue types
+- **Variational Autoencoder (VAE)** with early stopping
+- **Leiden clustering** with adaptive metrics
+- **Automated hyperparameter optimization** with Optuna
+- **Calibrated confidence scores** for predictions
+- **Adaptive marker gene discovery**
 
-## Installation
+## ✨ Key Features
 
-### Requirements
+- ✅ **Adaptive marker gene discovery** based on ground truth data
+- ✅ **Smart ARI weighting** based on ground truth coverage
+- ✅ **VAE early stopping** with validation loss monitoring
+- ✅ **Automatic model selection** (XGBoost, Logistic Regression, SVC)
+- ✅ **Calibrated confidence scores** on hold-out set
+- ✅ **Reproducible UMAP visualizations** with fixed random state
+- ✅ **Comprehensive evaluation and visualization**
+
+## 🚀 Installation
+
+### Prerequisites
 
 - Python 3.8 or higher
-- pip package manager
+- CUDA-capable GPU (optional, but recommended)
 
-### Install from source
-
-```bash
-git clone https://github.com/or4k2l/scVAE-Annotator.git
-cd scVAE-Annotator
-pip install -e .
-```
-
-### Install with pip (once published)
+### Install Dependencies
 
 ```bash
-pip install scvae-annotator
+pip install -r requirements.txt
 ```
 
-## Quick Start
+## 📖 Usage
 
-### Basic Usage
+### Simple Example
 
 ```python
-from scvae_annotator import Annotator
+from scvae_annotator import create_optimized_config, run_annotation_pipeline
 
-# Load your single-cell data
-annotator = Annotator()
-annotator.load_data("path/to/your/counts.csv")
+# Create configuration
+config = create_optimized_config()
 
-# Train the model
-annotator.train(epochs=100)
-
-# Annotate cells
-annotations = annotator.annotate()
-
-# Visualize results
-annotator.plot_umap(annotations)
+# Run pipeline
+adata = run_annotation_pipeline(config)
 ```
 
-### Command Line Interface
+### With Custom Data
+
+```python
+from scvae_annotator import Config, run_annotation_pipeline
+
+# Custom configuration
+config = Config(
+    output_dir='./my_results',
+    autoencoder_epochs=100,
+    optuna_trials=50,
+    use_hyperparameter_optimization=True
+)
+
+# Run pipeline with your own data
+adata = run_annotation_pipeline(
+    config,
+    data_path='path/to/your/data.h5',
+    annotations_path='path/to/annotations.csv'
+)
+```
+
+### Run as Script
 
 ```bash
-# Train and annotate
-scvae-annotate --input counts.csv --output annotations.csv
-
-# Use pre-trained model
-scvae-annotate --input counts.csv --model pretrained/pbmc.h5 --output annotations.csv
+python scvae_annotator.py
 ```
 
-## Documentation
+## 🔧 Configuration
 
-For detailed documentation, please visit [our documentation site](https://scvae-annotator.readthedocs.io/) (coming soon).
+Key parameters can be customized through the `Config` class:
 
-## Examples
+```python
+config = Config(
+    # Clustering
+    leiden_resolution_range=(0.01, 0.2),
+    leiden_resolution_steps=15,
+    
+    # VAE
+    autoencoder_embedding_dim=32,
+    autoencoder_hidden_dims=[512, 256, 128, 64],
+    autoencoder_epochs=100,
+    autoencoder_patience=7,  # Early stopping
+    
+    # Klassifizierung
+    use_hyperparameter_optimization=True,
+    optuna_trials=50,
+    subsample_optuna_train=5000,
+    confidence_threshold=0.7,
+    
+    # Preprocessing
+    n_top_genes=3000,
+    min_genes_per_cell=200,
+    max_mt_percent=20
+)
+```
 
-Example notebooks and scripts can be found in the `examples/` directory:
+## 📊 Output
 
-- `basic_annotation.ipynb`: Introduction to basic cell type annotation
-- `custom_training.ipynb`: How to train custom models on your data
-- `marker_analysis.ipynb`: Identifying and validating marker genes
+The pipeline generates the following outputs in `output_dir`:
 
-## Contributing
+- `annotated_data.h5ad` - Annotated AnnData file
+- `umap_comparison.png` - UMAP visualization
+- `confusion_matrix.png` - Confusion matrix
+- `confidence_analysis.png` - Confidence score analysis
+- `calibration_plot.png` - Calibration plot
+- `classification_report.csv` - Detailed classification report
+- `evaluation_metrics.json` - Evaluation metrics
+- `optimization_summary.json` - Optimization summary
+- `vae_loss_history.csv` - VAE training history
+- `clustering_metrics.csv` - Clustering metrics
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+## 🔬 Methodology
 
-## License
+### 1. Preprocessing
+- Quality control (mitochondrial genes, ribosomal genes)
+- Normalization and log transformation
+- Highly variable genes selection
+- Adaptive marker gene integration
+- Batch correction with Harmony
+
+### 2. Clustering
+- Leiden algorithm with automatic resolution optimization
+- Adaptive metric weighting (Silhouette + ARI)
+- Ground truth coverage consideration
+
+### 3. Feature Extraction
+- Variational Autoencoder (VAE)
+- Early stopping to prevent overfitting
+- Validation loss monitoring
+
+### 4. Classification
+- Hyperparameter optimization with Optuna
+- SMOTE for class balancing
+- Model calibration on hold-out set
+- Adaptive confidence thresholds
+
+### 5. Evaluation
+- Accuracy, Cohen's Kappa
+- Confusion matrix
+- Confidence calibration plot
+- Per-class performance metrics
+
+## 📈 Example Results
+
+### PBMC 10k Dataset (Primary Analysis)
+
+- **Accuracy**: **99.38%**
+- **Cohen's Kappa**: **0.9925**
+- **High-Confidence Predictions**: **98.8%** (10,292/10,412 cells)
+- **VAE Training**: **13% faster** with early stopping
+- **Cell Types Identified**: 16 distinct populations
+- **Perfect Classifications**: HSPC, Plasma, pDC (F1=1.000)
+
+📊 **[View Full Analysis Report](ANALYSIS_REPORT.md)** for detailed results and visualizations.
+
+🎨 **[View Figures Gallery](figures/README.md)** for all visualization outputs and interpretations.
+
+### PBMC 3k Dataset (Cross-Dataset Validation)
+
+- **Accuracy**: **93.01%** (93.6% retention from PBMC 10k)
+- **Cohen's Kappa**: **0.9120**
+- **High-Confidence Predictions**: **98.1%** (2,646/2,700 cells)
+- **VAE Training**: **40% faster** with early stopping
+- **Cell Types Identified**: 10 distinct populations
+- **Generalization**: Robust cross-dataset performance validated
+
+🔬 **[View Validation Report](VALIDATION_REPORT.md)** for cross-dataset generalization analysis.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please create a pull request or open an issue.
+
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Citation
+## 📧 Contact
 
-If you use scVAE-Annotator in your research, please cite:
+For questions or issues, please open an issue on GitHub.
 
-```
+## 🙏 Acknowledgments
+
+- [Scanpy](https://scanpy.readthedocs.io/) für Single-Cell-Analyse
+- [Optuna](https://optuna.org/) für Hyperparameter-Optimierung
+- [PyTorch](https://pytorch.org/) für Deep Learning
+- 10x Genomics für Beispieldaten
+
+## 📚 Citation
+
+If you use this tool in your research, please cite:
+
+```bibtex
 @software{scvae_annotator,
-  title = {scVAE-Annotator: Automated Cell Type Annotation for Single-Cell RNA-seq},
+  title = {scVAE-Annotator: Advanced Single-Cell RNA-seq Annotation Pipeline},
   author = {Your Name},
-  year = {2026},
+  year = {2025},
   url = {https://github.com/or4k2l/scVAE-Annotator}
 }
 ```
-
-## Support
-
-For questions and support:
-- Open an issue on [GitHub Issues](https://github.com/or4k2l/scVAE-Annotator/issues)
-- Check our [FAQ](docs/FAQ.md) (coming soon)
-
-## Acknowledgments
 
 This project builds upon the foundational work of the scVAE project and the broader single-cell analysis community.

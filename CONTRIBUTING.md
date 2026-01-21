@@ -45,12 +45,22 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-3. Install in development mode:
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Install in development mode (optional):
 ```bash
 pip install -e ".[dev]"
 ```
 
-4. Run tests:
+5. Test the pipeline:
+```bash
+python scvae_annotator.py
+```
+
+6. Run tests (if available):
 ```bash
 pytest
 ```

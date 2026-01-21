@@ -48,6 +48,49 @@ coverage.xml
 *.cover
 *.py.cover
 .hypothesis/
+
+# Data and results directories
+data/
+results/
+*.h5
+*.h5ad
+*.csv
+*.zip
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyTorch models
+*.pth
+*.pt
+
+# Plots
+*.png
+*.pdf
+*.svg
+
+# Logs
+*.log
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 .pytest_cache/
 cover/
 

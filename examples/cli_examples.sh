@@ -2,20 +2,42 @@
 #
 # Example: Command-line usage of scVAE-Annotator
 #
-# This script demonstrates how to use the scvae-annotate CLI tool.
+# This script demonstrates how to use scVAE-Annotator pipeline
 #
 
-# Example 1: Basic usage with a CSV file
-# scvae-annotate --input data/counts.csv --output results/annotations.csv
-
-# Example 2: Using a pre-trained model
-# scvae-annotate --input data/counts.csv --model models/pbmc.h5 --output results/annotations.csv
-
-# Example 3: Customizing training parameters
-# scvae-annotate --input data/counts.csv --output results/annotations.csv --epochs 200 --latent-dim 15 --batch-size 256
-
-# Example 4: With transposed data (genes as rows)
-# scvae-annotate --input data/counts.tsv --output results/annotations.csv --transpose
-
-# For more options, run:
-# scvae-annotate --help
+echo "scVAE-Annotator CLI Examples"
+echo "=============================="
+echo ""
+echo "Note: The main pipeline is designed to be used as a Python module."
+echo "For command-line usage, use the Python API directly:"
+echo ""
+echo "# Example 1: Basic annotation with PBMC 10k dataset"
+echo "python -c \""
+echo "from scvae_annotator import create_optimized_config, run_annotation_pipeline"
+echo "config = create_optimized_config()"
+echo "results = run_annotation_pipeline(config)"
+echo "\""
+echo ""
+echo "# Example 2: Custom configuration"
+echo "python -c \""
+echo "from scvae_annotator import Config, run_annotation_pipeline"
+echo "config = Config("
+echo "    data_path='path/to/data.h5ad',"
+echo "    output_dir='my_results',"
+echo "    target_genes=2000,"
+echo "    n_neighbors=15"
+echo ")"
+echo "results = run_annotation_pipeline(config)"
+echo "\""
+echo ""
+echo "# Example 3: Using prepared PBMC 3k dataset"
+echo "# First prepare the data:"
+echo "# python data/prepare_pbmc3k.py"
+echo "python -c \""
+echo "from scvae_annotator import Config, run_annotation_pipeline"
+echo "config = Config(data_path='data/pbmc3k.h5ad', output_dir='pbmc3k_results')"
+echo "results = run_annotation_pipeline(config)"
+echo "\""
+echo ""
+echo "# For interactive usage, see examples/basic_example.py"
+echo "python examples/basic_example.py"
