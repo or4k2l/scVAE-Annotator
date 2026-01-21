@@ -37,6 +37,11 @@ try:
         Config,
         create_optimized_config,
         run_annotation_pipeline,
+        analyze_optimization_results,
+        create_visualizations,
+        load_and_prepare_data,
+        enhanced_preprocessing,
+        optimized_leiden_clustering,
         train_improved_vae,
         EnhancedAutoencoderAnnotator
     )
@@ -45,6 +50,11 @@ try:
         "Config",
         "create_optimized_config",
         "run_annotation_pipeline",
+        "analyze_optimization_results",
+        "create_visualizations",
+        "load_and_prepare_data",
+        "enhanced_preprocessing",
+        "optimized_leiden_clustering",
         "train_improved_vae",
         "EnhancedAutoencoderAnnotator",
         "__version__"
