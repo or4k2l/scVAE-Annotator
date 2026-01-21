@@ -2,6 +2,31 @@
 
 This directory contains examples for using scVAE-Annotator.
 
+## Prerequisites
+
+Before running the examples, make sure you have installed the package:
+
+```bash
+cd /workspaces/scVAE-Annotator  # or your project root
+pip install -e .
+```
+
+This ensures the `scvae_annotator` module is properly importable.
+
+### Troubleshooting
+
+**Import Errors:**
+If you see `ModuleNotFoundError: No module named 'scvae_annotator'`, you need to install the package:
+```bash
+pip install -e .
+```
+
+**SciPy Array API Warnings:**
+If you encounter scipy compatibility issues, set:
+```bash
+export SCIPY_ARRAY_API=0
+```
+
 ## Available Examples
 
 ### 1. Basic Example (`basic_example.py`)
@@ -17,6 +42,11 @@ This example demonstrates:
 - Configuring the optimized pipeline
 - Running the complete annotation
 - Evaluating results
+
+**Requirements:**
+- Internet connection (for data download on first run)
+- ~500MB disk space for PBMC 10k dataset
+- Estimated runtime: 5-15 minutes (depending on hardware)
 
 ### 2. CLI Examples (`cli_examples.sh`)
 

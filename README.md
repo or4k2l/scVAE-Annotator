@@ -35,13 +35,62 @@ scVAE-Annotator is an optimized pipeline for automated cell type annotation in s
 - Python 3.8 or higher
 - CUDA-capable GPU (optional, but recommended)
 
-### Install Dependencies
+### Quick Start
+
+1. **Clone the repository:**
+```bash
+git clone https://github.com/or4k2l/scVAE-Annotator.git
+cd scVAE-Annotator
+```
+
+2. **Install the package in editable mode:**
+```bash
+pip install -e .
+```
+
+This will automatically install all dependencies from `requirements.txt`.
+
+### Alternative: Install Dependencies Only
+
+If you prefer to install dependencies without installing the package:
 
 ```bash
 pip install -r requirements.txt
 ```
 
+**Note:** If you skip the `pip install -e .` step, you'll need to manually adjust Python paths when running examples.
+
+### Troubleshooting
+
+**SciPy Array API Issues:**
+If you encounter scipy array API compatibility warnings or errors, set this environment variable:
+```bash
+export SCIPY_ARRAY_API=0
+```
+
+Or add it to your shell profile (`~/.bashrc` or `~/.zshrc`):
+```bash
+echo 'export SCIPY_ARRAY_API=0' >> ~/.bashrc
+source ~/.bashrc
+```
+
+📝 **For more troubleshooting help, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md)**
+
 ## 📖 Usage
+
+### Quick Start
+
+After installation, run the basic example:
+
+```bash
+# Set environment variable if needed
+export SCIPY_ARRAY_API=0
+
+# Run the example
+python examples/basic_example.py
+```
+
+This will download the PBMC 10k dataset and run the complete annotation pipeline.
 
 ### Simple Example
 

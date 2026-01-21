@@ -6,14 +6,37 @@ This example demonstrates how to:
 2. Run the annotation pipeline
 3. Analyze results
 4. Create visualizations
+
+Prerequisites:
+- Install the package: pip install -e .
+- Or ensure PYTHONPATH includes the project root
+- Set SCIPY_ARRAY_API=0 if encountering scipy compatibility issues
 """
 
+import os
 import sys
-sys.path.insert(0, '..')
 
-from scvae_annotator import create_optimized_config, run_annotation_pipeline, analyze_optimization_results
+# Try to import the package - if it fails, provide helpful error message
+try:
+    from scvae_annotator import (
+        create_optimized_config,
+        run_annotation_pipeline,
+        analyze_optimization_results
+    )
+except ImportError as e:
+    print("❌ Error: Could not import scvae_annotator")
+    print("\nPlease install the package first:")
+    print("  cd /workspaces/scVAE-Annotator")
+    print("  pip install -e .")
+    print("\nOr set PYTHONPATH:")
+    print("  export PYTHONPATH=/workspaces/scVAE-Annotator:$PYTHONPATH")
+    print("\nIf you see scipy array API errors, run:")
+    print("  export SCIPY_ARRAY_API=0")
+    sys.exit(1)
+
 
 def main():
+    """Run the basic scVAE-Annotator example."""
     print("scVAE-Annotator Basic Example - Optimized Pipeline")
     print("=" * 60)
     
@@ -55,25 +78,24 @@ def main():
         print("   - confusion_matrix.png")
         print("   - confidence_analysis.png")
         
+        print("\n" + "=" * 50)
+        print("Next steps:")
+        print("- Load your own scRNA-seq data")
+        print("- Adjust model parameters for your dataset")
+        print("- Train for more epochs for better results")
+        print("- Explore marker genes for each cluster")
+        
     except Exception as e:
         print(f"\n❌ Error running pipeline: {e}")
         print("\nMake sure you have:")
-        print("   1. Installed all dependencies: pip install -r requirements.txt")
-        print("   2. Internet connection (for data download)")
-        print("   3. Sufficient disk space (~500MB)")
+        print("   1. Installed the package: pip install -e .")
+        print("   2. Installed all dependencies: pip install -r requirements.txt")
+        print("   3. Internet connection (for data download)")
+        print("   4. Sufficient disk space (~500MB)")
+        print("\nIf you see scipy errors, try:")
+        print("   export SCIPY_ARRAY_API=0")
+        sys.exit(1)
+
 
 if __name__ == "__main__":
-    main()
-
-        print(f"   Could not create visualization: {e}")
-    
-    print("\n" + "=" * 50)
-    print("Example complete!")
-    print("\nNext steps:")
-    print("- Load your own scRNA-seq data")
-    print("- Adjust model parameters for your dataset")
-    print("- Train for more epochs for better results")
-    print("- Explore marker genes for each cluster")
-
-if __name__ == '__main__':
     main()
