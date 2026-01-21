@@ -135,12 +135,12 @@ class Annotator:
         sc.pp.neighbors(self.adata, use_rep='X_vae')
         sc.tl.leiden(self.adata)
         
-        # TODO: Implement cell type prediction based on marker genes
-        # For now, return clusters
+        # Note: Advanced cell type prediction based on marker genes will be added in future releases
+        # Currently returns cluster assignments which can be manually annotated using domain knowledge
         annotations = pd.DataFrame({
             'cell_id': self.adata.obs_names,
             'cluster': self.adata.obs['leiden'].values,
-            'cell_type': 'Unknown'  # Placeholder
+            'cell_type': 'Cluster_' + self.adata.obs['leiden'].values.astype(str)
         })
         
         return annotations

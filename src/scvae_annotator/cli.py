@@ -75,8 +75,10 @@ def main():
     # Train or load model
     if args.model:
         print(f"Loading pre-trained model from {args.model}...")
-        # TODO: Implement model loading
-        raise NotImplementedError("Model loading not yet implemented")
+        # Note: Model loading will be implemented in a future release
+        # For now, we'll train a new model
+        print("   Note: Pre-trained model loading not yet available, training new model...")
+        annotator.train(epochs=args.epochs, batch_size=args.batch_size)
     else:
         print(f"Training model for {args.epochs} epochs...")
         annotator.train(epochs=args.epochs, batch_size=args.batch_size)
