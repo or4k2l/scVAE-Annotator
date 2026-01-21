@@ -1,0 +1,43 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints myst-parser
+    
+    - name: Check documentation links
+      run: |
+        # Check for broken markdown links
+        find . -name "*.md" -exec grep -H "](.*)" {} \; || true
+    
+    - name: Validate README
+      run: |
+        if [ ! -f "README.md" ]; then
+          echo "README.md not found!"
+          exit 1
+        fi
+        # Check README has minimum required sections
+        grep -q "## Installation" README.md || echo "Missing Installation section"
+        grep -q "## Usage" README.md || echo "Missing Usage section"

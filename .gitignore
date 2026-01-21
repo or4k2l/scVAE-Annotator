@@ -48,6 +48,12 @@ coverage.xml
 *.cover
 *.py.cover
 .hypothesis/
+.pytest_cache/
+
+# Test artifacts
+bandit-report.json
+.mypy_cache/
+.ruff_cache/
 
 # Data and results directories
 data/
