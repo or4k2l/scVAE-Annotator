@@ -37,9 +37,15 @@ def preprocess_data(
     AnnData
         Preprocessed AnnData object
     """
+    # Adjust thresholds for small datasets
+    actual_min_genes = min(min_genes, adata.n_vars // 2)
+    actual_min_cells = min(min_cells, adata.n_obs // 10)
+    
     # Filter cells and genes
-    sc.pp.filter_cells(adata, min_genes=min_genes)
-    sc.pp.filter_genes(adata, min_cells=min_cells)
+    if actual_min_genes > 0:
+        sc.pp.filter_cells(adata, min_genes=actual_min_genes)
+    if actual_min_cells > 0:
+        sc.pp.filter_genes(adata, min_cells=actual_min_cells)
     
     # Normalize
     if target_sum is not None:
@@ -50,10 +56,13 @@ def preprocess_data(
         sc.pp.log1p(adata)
     
     # Find highly variable genes
-    sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes)
-    adata = adata[:, adata.var.highly_variable].copy()
+    # Only select highly variable genes if we have more genes than the threshold
+    if adata.n_vars > n_top_genes:
+        sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes)
+        adata = adata[:, adata.var.highly_variable].copy()
     
     # Scale
-    sc.pp.scale(adata, max_value=10)
+    if adata.n_vars > 0 and adata.n_obs > 0:
+        sc.pp.scale(adata, max_value=10)
     
     return adata
