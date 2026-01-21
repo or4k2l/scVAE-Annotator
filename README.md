@@ -209,7 +209,7 @@ If you use this tool in your research, please cite:
 ```bibtex
 @software{scvae_annotator,
   title = {scVAE-Annotator: Advanced Single-Cell RNA-seq Annotation Pipeline},
-  author = {Your Name},
+  author = Yahya Akbay,
   year = {2025},
   url = {https://github.com/or4k2l/scVAE-Annotator}
 }
