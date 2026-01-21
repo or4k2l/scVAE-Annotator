@@ -221,6 +221,10 @@ The pipeline generates the following outputs in `output_dir`:
 
 🎨 **[View Figures Gallery](figures/README.md)** for all visualization outputs and interpretations.
 
+<img width="4768" height="3566" alt="umap_comparison" src="https://github.com/user-attachments/assets/12ff79a5-163c-4827-9273-aa8d0d672171" />
+
+<img width="4770" height="3566" alt="umap_comparison" src="https://github.com/user-attachments/assets/00e462c0-d9a2-4315-a4a0-7dfe46c08748" />
+
 ### PBMC 3k Dataset (Cross-Dataset Validation)
 
 - **Accuracy**: **93.01%** (93.6% retention from PBMC 10k)
