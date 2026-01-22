@@ -308,7 +308,7 @@ If you use this pipeline or analysis in your research, please cite:
 ```bibtex
 @software{scvae_annotator_2025,
   title = {scVAE-Annotator: Advanced Single-Cell RNA-seq Annotation Pipeline},
-  author = {Your Name},
+  author = Yahya Akbay,
   year = {2025},
   url = {https://github.com/or4k2l/scVAE-Annotator},
   note = {Analysis performed: September 9, 2025}
