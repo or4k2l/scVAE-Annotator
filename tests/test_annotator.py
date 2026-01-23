@@ -7,29 +7,29 @@ import numpy as np
 import pandas as pd
 import scanpy as sc
 from scvae_annotator import Config, create_optimized_config
+from scvae_annotator.annotator import Annotator
 
 
 def test_config_initialization():
     """Test Config initialization with defaults."""
     config = Config()
     
-    assert config.target_genes == 2000
-    assert config.n_neighbors == 30
-    assert config.output_dir == 'results'
-    assert config.min_cells == 3
-    assert config.min_genes == 200
+    assert config.n_top_genes == 3000
+    assert config.leiden_k_neighbors == 30
+    assert config.output_dir == './results'
+    assert config.min_genes_per_cell == 200
 
 
 def test_config_custom_values():
     """Test Config initialization with custom values."""
     config = Config(
-        target_genes=3000,
-        n_neighbors=15,
+        n_top_genes=4000,
+        leiden_k_neighbors=15,
         output_dir='custom_results'
     )
     
-    assert config.target_genes == 3000
-    assert config.n_neighbors == 15
+    assert config.n_top_genes == 4000
+    assert config.leiden_k_neighbors == 15
     assert config.output_dir == 'custom_results'
 
 
@@ -38,12 +38,11 @@ def test_create_optimized_config():
     config = create_optimized_config()
     
     # Check that optimized values are set
-    assert config.target_genes == 2000
-    assert config.n_neighbors == 30
-    assert config.leiden_resolution == 0.4
-    assert config.latent_dim == 32
-    assert config.vae_epochs == 100
-    assert config.early_stopping_patience == 10
+    assert config.n_top_genes == 3000
+    assert config.leiden_k_neighbors == 30
+    assert config.autoencoder_embedding_dim == 32
+    assert config.autoencoder_epochs == 100
+    assert config.autoencoder_patience == 7
 
 
 def test_synthetic_data_preprocessing():
@@ -69,12 +68,8 @@ def test_synthetic_data_preprocessing():
     assert 'X_norm' not in adata.layers  # log1p operates on .X
 
 
-def test_config_with_data_path():
-    """Test Config with data path."""
-    config = Config(data_path='test_data.h5ad')
-    
-    assert config.data_path == 'test_data.h5ad'
-
+def test_annotator_requires_training():
+    """Test annotate raises when model is not trained."""
     np.random.seed(42)
     data = pd.DataFrame(
         np.random.poisson(5, size=(100, 50)),

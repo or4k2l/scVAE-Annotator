@@ -240,8 +240,8 @@ Example:
 def test_config_initialization():
     """Test that Config initializes with defaults."""
     config = Config()
-    assert config.target_genes == 2000
-    assert config.n_neighbors == 30
+    assert config.n_top_genes == 3000
+    assert config.leiden_k_neighbors == 30
 ```
 
 ### Test Isolation

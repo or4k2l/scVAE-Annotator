@@ -30,7 +30,12 @@ def plot_umap(
     
     if annotations is not None and 'cell_type' in annotations.columns:
         # Color by cell type
-        sc.pl.umap(adata, color='leiden', ax=ax, show=False)
+        if 'cell_id' in annotations.columns:
+            cell_type_map = annotations.set_index('cell_id')['cell_type']
+            adata.obs['cell_type'] = adata.obs_names.map(cell_type_map)
+        elif len(annotations) == adata.n_obs:
+            adata.obs['cell_type'] = annotations['cell_type'].values
+        sc.pl.umap(adata, color='cell_type', ax=ax, show=False)
     else:
         # Color by cluster
         sc.pl.umap(adata, color='leiden', ax=ax, show=False)

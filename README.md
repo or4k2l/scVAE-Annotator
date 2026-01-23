@@ -151,7 +151,7 @@ config = Config(
     autoencoder_epochs=100,
     autoencoder_patience=7,  # Early stopping
     
-    # Klassifizierung
+    # Classification
     use_hyperparameter_optimization=True,
     optuna_trials=50,
     subsample_optuna_train=5000,
