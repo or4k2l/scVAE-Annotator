@@ -8,6 +8,10 @@
 [![Code Quality](https://github.com/or4k2l/scVAE-Annotator/actions/workflows/lint.yml/badge.svg)](https://github.com/or4k2l/scVAE-Annotator/actions/workflows/lint.yml)
 [![codecov](https://codecov.io/gh/or4k2l/scVAE-Annotator/branch/main/graph/badge.svg)](https://codecov.io/gh/or4k2l/scVAE-Annotator)
 
+"scVAE-Annotator vs. scANVI Benchmarking (Paul15 Dataset): Our model achieves competitive accuracy (95.7%) while being significantly more efficient. By utilizing Early Stopping, scVAE-Annotator converged in just 34 epochs compared to 200 epochs required by scANVI. Additionally, scVAE-Annotator provides an integrated Confidence Scoring system to identify ambiguous cell states, a feature lacking in traditional semi-supervised models."
+
+<img width="2258" height="989" alt="Herunterladen (11)" src="https://github.com/user-attachments/assets/40922dd2-53f4-4b87-969f-44cca96051dc" />
+
 ## 🎯 Overview
 
 scVAE-Annotator is an optimized pipeline for automated cell type annotation in single-cell RNA-seq data. It combines:
