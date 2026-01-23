@@ -63,12 +63,13 @@ Configuration class for the pipeline:
 from scvae_annotator import Config
 
 config = Config(
-    data_path='data/pbmc10k.h5ad',
     output_dir='results',
-    target_genes=2000,
-    n_neighbors=30,
-    leiden_resolution=0.4,
-    latent_dim=32
+    n_top_genes=2000,
+    min_genes_per_cell=200,
+    max_mt_percent=15,
+    leiden_resolution_range=(0.01, 0.2),
+    leiden_resolution_steps=15,
+    autoencoder_embedding_dim=32
 )
 ```
 
