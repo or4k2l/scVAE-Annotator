@@ -1,3 +1,8 @@
+<p align="center">
+<strong>scVAE-Annotator trades peak accuracy for epistemic caution.</strong><br/>
+Cells with ambiguous transcriptional identity are explicitly flagged as uncertain rather than force-assigned, indicating that lower accuracy does not necessarily imply reduced biological relevance.
+</p>
+
 # scVAE-Annotator
 
 **Advanced Single-Cell RNA-seq Annotation Pipeline with VAE and Automated Hyperparameter Optimization**
