@@ -101,7 +101,7 @@ def test_early_stopping_logic():
                 stopped_early = True
                 break
     
-    # Early stopping should NOT trigger with only 4 non-improving steps
+    # Early stopping should NOT trigger with only 4 non-improving steps (patience=5)
     assert not stopped_early
     assert best_loss == 8.4
-    assert counter == 4  # Only 4 non-improving steps after best loss
+    assert counter == 4  # 4 non-improving steps, less than patience threshold of 5
