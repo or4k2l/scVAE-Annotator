@@ -5,6 +5,7 @@ Visualization utilities for scVAE-Annotator.
 import matplotlib.pyplot as plt
 import seaborn as sns
 import scanpy as sc
+import anndata
 from typing import Optional
 import pandas as pd
 
