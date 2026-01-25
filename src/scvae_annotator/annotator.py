@@ -5,6 +5,7 @@ Main Annotator class for scVAE-Annotator.
 import numpy as np
 import pandas as pd
 import scanpy as sc
+import anndata
 from typing import Optional, Union
 from pathlib import Path
 

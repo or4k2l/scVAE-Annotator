@@ -3,6 +3,7 @@ Data preprocessing utilities for scVAE-Annotator.
 """
 
 import scanpy as sc
+import anndata
 from typing import Optional
 
 
