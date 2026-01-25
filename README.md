@@ -19,6 +19,8 @@ Cells with ambiguous transcriptional identity are explicitly flagged as uncertai
 
 scVAE-Annotator’s uncertainty scores correlate with marker expression strength, suggesting that low confidence reflects biological ambiguity rather than annotation error.
 
+Performance differences between scVAE-Annotator and scANVI are largely confined to low marker-coverage cells; in high-signal regimes, both models converge to near-identical accuracy, while scVAE uniquely exposes biological ambiguity through explicit uncertainty.
+
 ## 🎯 Overview
 
 scVAE-Annotator is an optimized pipeline for automated cell type annotation in single-cell RNA-seq data. It combines:
