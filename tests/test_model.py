@@ -6,10 +6,12 @@ import pytest
 import torch
 import numpy as np
 
+from scvae_annotator import VAEModel
+
 
 def test_torch_available():
     """Test that PyTorch is available."""
-    assert torch.cuda.is_available() or True  # CPU is fine for tests
+    assert torch.__version__
 
 
 def test_vae_encoder_architecture():
@@ -102,14 +104,16 @@ def test_early_stopping_logic():
     assert counter >= patience
     assert best_loss == 8.4
 
+
+def test_decode_output_shape():
     """Test decoding functionality."""
     np.random.seed(42)
     model = VAEModel(n_genes=50, n_latent=10)
-    
+
     # Create synthetic latent representation
     z = np.random.randn(10, 10).astype(np.float32)
-    
+
     # Decode
     recon = model.decode(z)
-    
+
     assert recon.shape == (10, 50)
