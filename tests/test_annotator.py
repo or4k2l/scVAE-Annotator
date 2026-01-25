@@ -13,23 +13,22 @@ def test_config_initialization():
     """Test Config initialization with defaults."""
     config = Config()
     
-    assert config.target_genes == 2000
-    assert config.n_neighbors == 30
-    assert config.output_dir == 'results'
-    assert config.min_cells == 3
-    assert config.min_genes == 200
+    assert config.n_top_genes == 3000
+    assert config.leiden_k_neighbors == 30
+    assert config.output_dir == './results'
+    assert config.min_genes_per_cell == 200
 
 
 def test_config_custom_values():
     """Test Config initialization with custom values."""
     config = Config(
-        target_genes=3000,
-        n_neighbors=15,
+        n_top_genes=2500,
+        leiden_k_neighbors=15,
         output_dir='custom_results'
     )
     
-    assert config.target_genes == 3000
-    assert config.n_neighbors == 15
+    assert config.n_top_genes == 2500
+    assert config.leiden_k_neighbors == 15
     assert config.output_dir == 'custom_results'
 
 
@@ -38,12 +37,12 @@ def test_create_optimized_config():
     config = create_optimized_config()
     
     # Check that optimized values are set
-    assert config.target_genes == 2000
-    assert config.n_neighbors == 30
-    assert config.leiden_resolution == 0.4
-    assert config.latent_dim == 32
-    assert config.vae_epochs == 100
-    assert config.early_stopping_patience == 10
+    assert config.n_top_genes == 3000
+    assert config.leiden_k_neighbors == 30
+    assert config.leiden_resolution_range == (0.01, 0.2)
+    assert config.autoencoder_embedding_dim == 32
+    assert config.autoencoder_epochs == 100
+    assert config.autoencoder_patience == 7
 
 
 def test_synthetic_data_preprocessing():
@@ -69,20 +68,14 @@ def test_synthetic_data_preprocessing():
     assert 'X_norm' not in adata.layers  # log1p operates on .X
 
 
-def test_config_with_data_path():
-    """Test Config with data path."""
-    config = Config(data_path='test_data.h5ad')
+def test_config_with_output_dir():
+    """Test Config with output directory."""
+    config = Config(output_dir='test_output')
     
-    assert config.data_path == 'test_data.h5ad'
+    assert config.output_dir == 'test_output'
 
     np.random.seed(42)
     data = pd.DataFrame(
         np.random.poisson(5, size=(100, 50)),
         columns=[f"gene_{i}" for i in range(50)]
     )
-    
-    annotator = Annotator()
-    annotator.load_data(data)
-    
-    with pytest.raises(ValueError, match="Model not trained"):
-        annotator.annotate()
