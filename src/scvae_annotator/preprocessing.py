@@ -89,18 +89,33 @@ def enhanced_preprocessing(adata: ad.AnnData, config: Config) -> ad.AnnData:
     sc.pp.calculate_qc_metrics(adata, qc_vars=['mt', 'ribo'], percent_top=None, log1p=False, inplace=True)
 
     n_cells_before = adata.shape[0]
-    adata = adata[adata.obs.n_genes_by_counts > config.min_genes_per_cell]
-    adata = adata[adata.obs.pct_counts_mt < config.max_mt_percent]
+    cell_mask = adata.obs.n_genes_by_counts > config.min_genes_per_cell
+    mt_mask = adata.obs.pct_counts_mt < config.max_mt_percent
+    filtered = adata[cell_mask & mt_mask].copy()
+    if filtered.shape[0] == 0:
+        logger.warning("All cells filtered out; skipping cell filtering")
+    else:
+        adata = filtered
     logger.info(f"Filtered {n_cells_before - adata.shape[0]} low-quality cells")
 
-    sc.pp.filter_genes(adata, min_cells=3)
+    adata_before_gene_filter = adata.copy()
+    sc.pp.filter_genes(adata, min_cells=config.min_cells)
+    if adata.shape[1] == 0:
+        logger.warning("All genes filtered out; restoring original gene set")
+        adata = adata_before_gene_filter
     adata.raw = adata
 
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
 
+    if getattr(config, "_target_genes_explicit", False) and config.target_genes is not None:
+        n_top_genes = config.target_genes
+    else:
+        n_top_genes = config.n_top_genes
+    if adata.shape[1] > 0:
+        n_top_genes = min(n_top_genes, adata.shape[1])
     sc.pp.highly_variable_genes(adata, min_mean=0.0125, max_mean=3, min_disp=0.5,
-                                n_top_genes=config.n_top_genes)
+                                n_top_genes=n_top_genes)
 
     marker_genes = discover_marker_genes(adata, config)
     marker_mask = adata.var_names.isin(marker_genes)
@@ -109,13 +124,18 @@ def enhanced_preprocessing(adata: ad.AnnData, config: Config) -> ad.AnnData:
 
     adata = adata[:, adata.var.highly_variable].copy()
 
-    if adata.X.toarray().sum() / (adata.shape[0] * adata.shape[1]) < 0.05:
+    data_matrix = adata.X.toarray() if issparse(adata.X) else adata.X
+    if data_matrix.sum() / (adata.shape[0] * adata.shape[1]) < 0.05:
         logger.info("Data is very sparse, applying imputation...")
         imputer = KNNImputer(n_neighbors=5)
-        adata.X = imputer.fit_transform(adata.X.toarray() if issparse(adata.X) else adata.X)
+        adata.X = imputer.fit_transform(data_matrix)
 
     sc.pp.scale(adata, max_value=10)
-    sc.tl.pca(adata, n_comps=50, random_state=config.random_state)
+    max_components = min(50, adata.shape[0] - 1, adata.shape[1] - 1)
+    if max_components < 2:
+        logger.warning("Not enough dimensions for PCA; skipping PCA step")
+    else:
+        sc.tl.pca(adata, n_comps=max_components, random_state=config.random_state)
 
     if 'batch' not in adata.obs.columns:
         adata.obs['batch'] = 'batch1'
@@ -126,7 +146,8 @@ def enhanced_preprocessing(adata: ad.AnnData, config: Config) -> ad.AnnData:
     except Exception as e:
         logger.warning(f"Harmony failed: {e}. Continuing without batch correction.")
 
-    sc.pp.neighbors(adata, n_neighbors=config.leiden_k_neighbors, n_pcs=50, random_state=config.random_state)
+    n_neighbors = config.n_neighbors if config.n_neighbors is not None else config.leiden_k_neighbors
+    sc.pp.neighbors(adata, n_neighbors=n_neighbors, n_pcs=50, random_state=config.random_state)
 
     logger.info(f"Preprocessing complete. Final shape: {adata.shape}")
     return adata

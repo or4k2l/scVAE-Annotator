@@ -3,6 +3,7 @@ Visualization functions for scVAE-Annotator.
 """
 
 from typing import List, Tuple, Any
+from pathlib import Path
 
 import anndata as ad
 import matplotlib.pyplot as plt
@@ -13,6 +14,7 @@ from .config import Config, logger
 
 def create_visualizations(adata: ad.AnnData, config: Config) -> None:
     """Create comprehensive visualizations with reproducible UMAP."""
+    Path(config.output_dir).mkdir(parents=True, exist_ok=True)
     sc.tl.umap(adata, random_state=config.random_state)
 
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))

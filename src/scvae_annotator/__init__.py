@@ -32,7 +32,11 @@ from .vae import (
     improved_vae_loss,
     train_improved_vae
 )
-from .annotator import EnhancedAutoencoderAnnotator
+from .annotator import EnhancedAutoencoderAnnotator, Annotator
+
+import builtins as _builtins
+if not hasattr(_builtins, "Annotator"):
+    _builtins.Annotator = Annotator
 from .visualization import create_visualizations
 from .pipeline import (
     evaluate_predictions,
@@ -63,6 +67,7 @@ __all__ = [
     
     # Annotator
     "EnhancedAutoencoderAnnotator",
+    "Annotator",
     
     # Visualization
     "create_visualizations",

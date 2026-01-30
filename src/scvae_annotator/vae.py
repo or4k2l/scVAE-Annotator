@@ -4,6 +4,7 @@ VAE Model implementation for scVAE-Annotator.
 
 import logging
 from typing import List, Tuple, Optional, Dict, Any
+from pathlib import Path
 
 import torch
 import torch.nn as nn
@@ -99,9 +100,10 @@ def train_improved_vae(adata: ad.AnnData, config: Config) -> ad.AnnData:
     logger.info("Training VAE with early stopping...")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    embedding_dim = config.latent_dim if config.latent_dim is not None else config.autoencoder_embedding_dim
     model = ImprovedVAE(
         input_dim=adata.X.shape[1],
-        embedding_dim=config.autoencoder_embedding_dim,
+        embedding_dim=embedding_dim,
         hidden_dims=config.autoencoder_hidden_dims,
         dropout=config.autoencoder_dropout
     ).to(device)
@@ -128,7 +130,8 @@ def train_improved_vae(adata: ad.AnnData, config: Config) -> ad.AnnData:
     model.train()
     loss_history = []
 
-    for epoch in range(config.autoencoder_epochs):
+    total_epochs = config.vae_epochs if config.vae_epochs is not None else config.autoencoder_epochs
+    for epoch in range(total_epochs):
         train_loss = 0
         model.train()
         for batch in train_dataloader:
@@ -157,7 +160,7 @@ def train_improved_vae(adata: ad.AnnData, config: Config) -> ad.AnnData:
         scheduler.step(avg_val_loss)
 
         if (epoch + 1) % 10 == 0:
-            logger.info(f'Epoch {epoch+1}/{config.autoencoder_epochs}, Train: {avg_train_loss:.4f}, Val: {avg_val_loss:.4f}')
+            logger.info(f'Epoch {epoch+1}/{total_epochs}, Train: {avg_train_loss:.4f}, Val: {avg_val_loss:.4f}')
 
         if early_stopping(avg_val_loss):
             logger.info(f'Early stopping at epoch {epoch + 1}')
@@ -169,6 +172,7 @@ def train_improved_vae(adata: ad.AnnData, config: Config) -> ad.AnnData:
         _, mu, _ = model(full_data)
         adata.obsm['X_autoencoder'] = mu.detach().cpu().numpy()
 
+    Path(config.output_dir).mkdir(parents=True, exist_ok=True)
     pd.DataFrame(loss_history).to_csv(f"{config.output_dir}/vae_loss_history.csv", index=False)
     logger.info("VAE training completed")
     return adata

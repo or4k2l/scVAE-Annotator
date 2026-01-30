@@ -222,9 +222,10 @@ class TestEnhancedPreprocessing:
         """Test that marker genes are included in highly variable."""
         # Add some marker genes to var_names
         marker_gene = 'CD3E'
-        sample_adata.var_names = sample_adata.var_names.tolist()
-        if len(sample_adata.var_names) > 0:
-            sample_adata.var_names[0] = marker_gene
+        var_names = sample_adata.var_names.tolist()
+        if len(var_names) > 0:
+            var_names[0] = marker_gene
+            sample_adata.var_names = var_names
         
         config = Config()
         result = enhanced_preprocessing(sample_adata, config)

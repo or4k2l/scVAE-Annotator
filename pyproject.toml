@@ -130,6 +130,7 @@ filterwarnings = [
     "ignore::UserWarning",
     "ignore::DeprecationWarning",
     "ignore::PendingDeprecationWarning",
+    "ignore:In the future, the default backend for leiden will be igraph instead of leidenalg.*:FutureWarning",
 ]
 
 [tool.coverage.run]
@@ -209,29 +210,4 @@ disable = [
     "C0116",
     "R0913",
     "R0914",
-]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = [
-    "-v",
-    "--strict-markers",
-    "--tb=short",
-    "--cov=src/scvae_annotator",
-    "--cov-report=term-missing",
-    "--cov-report=html",
-    "--cov-report=xml",
-    "--cov-fail-under=0",  # Will be increased to 90 once achieved
-]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "cuda: marks tests that require CUDA",
-]
-filterwarnings = [
-    "ignore::DeprecationWarning",
-    "ignore::PendingDeprecationWarning",
 ]

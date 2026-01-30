@@ -22,6 +22,21 @@ logger.setLevel(logging.INFO)
 @dataclass
 class Config:
     """Configuration class for the annotation pipeline."""
+    # Legacy compatibility parameters (for tests and older API)
+    target_genes: Optional[int] = None
+    n_neighbors: Optional[int] = None
+    leiden_resolution: Optional[float] = None
+    latent_dim: Optional[int] = None
+    vae_epochs: Optional[int] = None
+    data_path: Optional[str] = None
+    min_cells: Optional[int] = None
+    min_genes: Optional[int] = None
+    early_stopping_patience: Optional[int] = None
+
+    _target_genes_explicit: bool = field(default=False, init=False, repr=False)
+    _leiden_resolution_explicit: bool = field(default=False, init=False, repr=False)
+    _min_genes_explicit: bool = field(default=False, init=False, repr=False)
+
     # Clustering parameters
     leiden_resolution_range: Tuple[float, float] = (0.005, 0.1)
     leiden_resolution_steps: int = 10
@@ -66,16 +81,60 @@ class Config:
     ])
 
     # Output paths
-    output_dir: str = './results'
+    output_dir: str = 'results'
     random_state: int = 42
 
     def __post_init__(self) -> None:
+        self._target_genes_explicit = self.target_genes is not None
+        self._leiden_resolution_explicit = self.leiden_resolution is not None
+        self._min_genes_explicit = self.min_genes is not None
+
+        if self.target_genes is None:
+            self.target_genes = 2000
+
+        if self.n_neighbors is None:
+            self.n_neighbors = self.leiden_k_neighbors
+        else:
+            self.leiden_k_neighbors = self.n_neighbors
+
+        if self.leiden_resolution is None:
+            self.leiden_resolution = sum(self.leiden_resolution_range) / 2
+
+        if self.latent_dim is None:
+            self.latent_dim = self.autoencoder_embedding_dim
+        else:
+            self.autoencoder_embedding_dim = self.latent_dim
+
+        if self.vae_epochs is None:
+            self.vae_epochs = self.autoencoder_epochs
+        else:
+            self.autoencoder_epochs = self.vae_epochs
+
+        if self.early_stopping_patience is None:
+            self.early_stopping_patience = self.autoencoder_patience
+        else:
+            self.autoencoder_patience = self.early_stopping_patience
+
+        if self.min_cells is None:
+            self.min_cells = 3
+
+        if self.min_genes is None:
+            self.min_genes = self.min_genes_per_cell
+        else:
+            self.min_genes_per_cell = self.min_genes
+
         Path(self.output_dir).mkdir(parents=True, exist_ok=True)
 
 
 def create_optimized_config() -> Config:
     """Create an optimized configuration."""
     return Config(
+        target_genes=2000,
+        n_neighbors=30,
+        leiden_resolution=0.4,
+        latent_dim=32,
+        vae_epochs=100,
+        early_stopping_patience=10,
         leiden_resolution_range=(0.01, 0.2),
         leiden_resolution_steps=15,
         leiden_k_neighbors=30,

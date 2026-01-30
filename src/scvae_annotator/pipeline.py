@@ -25,6 +25,7 @@ from .visualization import create_visualizations
 
 def evaluate_predictions(adata: ad.AnnData, config: Config) -> None:
     """Comprehensive evaluation of predictions."""
+    Path(config.output_dir).mkdir(parents=True, exist_ok=True)
     eval_adata = adata[adata.obs['cell_type_ground_truth'].dropna().index].copy()
 
     if eval_adata.shape[0] == 0:
@@ -132,10 +133,21 @@ def run_annotation_pipeline(config: Config, data_path: Optional[str] = None,
     """Run the complete optimized annotation pipeline."""
     logger.info("Starting optimized annotation pipeline...")
 
+    Path(config.output_dir).mkdir(parents=True, exist_ok=True)
+
+    if data_path is None:
+        if config.data_path is not None:
+            data_path = config.data_path
+        else:
+            data_path = None
+
     if data_path is None:
         download_data()
         data_path = './data/10x-Multiome-Pbmc10k-RNA.h5'
         annotations_path = './data/pbmc10k_annotations.csv'
+    else:
+        if not os.path.exists(data_path):
+            raise FileNotFoundError(f"Data file not found: {data_path}")
 
     adata = load_and_prepare_data(data_path)
 

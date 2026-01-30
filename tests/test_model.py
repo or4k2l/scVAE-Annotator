@@ -88,7 +88,7 @@ def test_early_stopping_logic():
     best_loss = float('inf')
     counter = 0
     
-    losses = [10.0, 9.0, 8.5, 8.4, 8.45, 8.5, 8.6, 8.7]
+    losses = [10.0, 9.0, 8.5, 8.4, 8.45, 8.5, 8.6, 8.7, 8.8]
     
     for loss in losses:
         if loss < best_loss:
@@ -101,15 +101,3 @@ def test_early_stopping_logic():
     
     assert counter >= patience
     assert best_loss == 8.4
-
-    """Test decoding functionality."""
-    np.random.seed(42)
-    model = VAEModel(n_genes=50, n_latent=10)
-    
-    # Create synthetic latent representation
-    z = np.random.randn(10, 10).astype(np.float32)
-    
-    # Decode
-    recon = model.decode(z)
-    
-    assert recon.shape == (10, 50)

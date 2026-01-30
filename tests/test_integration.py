@@ -95,8 +95,9 @@ def test_preprocessing_pipeline(synthetic_adata):
     sc.pp.normalize_total(synthetic_adata, target_sum=1e4)
     sc.pp.log1p(synthetic_adata)
     
-    # Check that normalization worked
-    assert np.allclose(synthetic_adata.X.sum(axis=1).mean(), np.log1p(1e4), rtol=0.1)
+    # Check that normalization worked (after log1p, invert to compare totals)
+    total_counts = np.expm1(synthetic_adata.X).sum(axis=1).mean()
+    assert np.allclose(total_counts, 1e4, rtol=0.1)
 
 
 def test_vae_training_basic(synthetic_adata, temp_output_dir):
