@@ -5,6 +5,7 @@ Pipeline and Evaluation functions for scVAE-Annotator.
 import os
 import json
 from pathlib import Path
+from typing import Optional, Dict, Any, List
 
 import anndata as ad
 import numpy as np
@@ -22,7 +23,7 @@ from .annotator import EnhancedAutoencoderAnnotator
 from .visualization import create_visualizations
 
 
-def evaluate_predictions(adata: ad.AnnData, config: Config):
+def evaluate_predictions(adata: ad.AnnData, config: Config) -> None:
     """Comprehensive evaluation of predictions."""
     eval_adata = adata[adata.obs['cell_type_ground_truth'].dropna().index].copy()
 
@@ -126,7 +127,8 @@ def evaluate_predictions(adata: ad.AnnData, config: Config):
         json.dump(metrics, f, indent=2)
 
 
-def run_annotation_pipeline(config: Config, data_path: str = None, annotations_path: str = None):
+def run_annotation_pipeline(config: Config, data_path: Optional[str] = None, 
+                           annotations_path: Optional[str] = None) -> ad.AnnData:
     """Run the complete optimized annotation pipeline."""
     logger.info("Starting optimized annotation pipeline...")
 
@@ -190,11 +192,11 @@ def run_annotation_pipeline(config: Config, data_path: str = None, annotations_p
     return adata
 
 
-def analyze_optimization_results(config: Config):
+def analyze_optimization_results(config: Config) -> Dict[str, Any]:
     """Analyze the results of the optimization pipeline."""
     results_dir = Path(config.output_dir)
 
-    summary = {}
+    summary: Dict[str, Any] = {}
 
     if (results_dir / "vae_loss_history.csv").exists():
         loss_df = pd.read_csv(results_dir / "vae_loss_history.csv")

@@ -2,7 +2,7 @@
 Enhanced Annotator with Optuna optimization for scVAE-Annotator.
 """
 
-from typing import Optional
+from typing import Optional, Dict, Any, cast
 
 import anndata as ad
 import numpy as np
@@ -22,10 +22,10 @@ from .config import Config, logger
 
 class EnhancedAutoencoderAnnotator:
     """Enhanced annotator with Optuna optimization and calibration."""
-    def __init__(self, config: Config):
+    def __init__(self, config: Config) -> None:
         self.config = config
-        self.best_model = None
-        self.best_model_name = None
+        self.best_model: Optional[Any] = None
+        self.best_model_name: Optional[str] = None
         self.label_encoder = LabelEncoder()
         self.smote = SMOTE(random_state=config.random_state) if config.use_smote else None
         self.confidence_threshold = config.confidence_threshold

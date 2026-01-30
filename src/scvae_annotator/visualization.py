@@ -2,6 +2,8 @@
 Visualization functions for scVAE-Annotator.
 """
 
+from typing import List, Tuple, Any
+
 import anndata as ad
 import matplotlib.pyplot as plt
 import scanpy as sc
@@ -9,7 +11,7 @@ import scanpy as sc
 from .config import Config, logger
 
 
-def create_visualizations(adata: ad.AnnData, config: Config):
+def create_visualizations(adata: ad.AnnData, config: Config) -> None:
     """Create comprehensive visualizations with reproducible UMAP."""
     sc.tl.umap(adata, random_state=config.random_state)
 

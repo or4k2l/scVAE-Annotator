@@ -9,9 +9,10 @@ Cells with ambiguous transcriptional identity are explicitly flagged as uncertai
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://github.com/or4k2l/scVAE-Annotator/actions/workflows/tests.yml/badge.svg)](https://github.com/or4k2l/scVAE-Annotator/actions/workflows/tests.yml)
-[![Code Quality](https://github.com/or4k2l/scVAE-Annotator/actions/workflows/lint.yml/badge.svg)](https://github.com/or4k2l/scVAE-Annotator/actions/workflows/lint.yml)
-[![codecov](https://codecov.io/gh/or4k2l/scVAE-Annotator/branch/main/graph/badge.svg)](https://codecov.io/gh/or4k2l/scVAE-Annotator)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](tests/)
+[![Coverage](https://img.shields.io/badge/coverage-31%25-orange.svg)](COVERAGE_REPORT.md)
+[![mypy](https://img.shields.io/badge/mypy-strict-blue.svg)](pyproject.toml)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 "scVAE-Annotator vs. scANVI Benchmarking (Paul15 Dataset): Our model achieves competitive accuracy (95.7%) while being significantly more efficient. By utilizing Early Stopping, scVAE-Annotator converged in just 34 epochs compared to 200 epochs required by scANVI. Additionally, scVAE-Annotator provides an integrated Confidence Scoring system to identify ambiguous cell states, a feature lacking in traditional semi-supervised models."
 

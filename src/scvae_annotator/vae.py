@@ -3,7 +3,7 @@ VAE Model implementation for scVAE-Annotator.
 """
 
 import logging
-from typing import List
+from typing import List, Tuple, Optional, Dict, Any
 
 import torch
 import torch.nn as nn
@@ -18,13 +18,13 @@ from .config import Config, logger
 
 class EarlyStopping:
     """Early stopping handler for training."""
-    def __init__(self, patience=7, min_delta=0.001):
+    def __init__(self, patience: int = 7, min_delta: float = 0.001) -> None:
         self.patience = patience
         self.min_delta = min_delta
         self.counter = 0
-        self.best_loss = None
+        self.best_loss: Optional[float] = None
 
-    def __call__(self, val_loss):
+    def __call__(self, val_loss: float) -> bool:
         if self.best_loss is None:
             self.best_loss = val_loss
         elif val_loss < self.best_loss - self.min_delta:
@@ -39,7 +39,7 @@ class EarlyStopping:
 class ImprovedVAE(nn.Module):
     """Improved Variational Autoencoder with batch normalization and dropout."""
     def __init__(self, input_dim: int, embedding_dim: int = 32,
-                 hidden_dims: List[int] = None, dropout: float = 0.2):
+                 hidden_dims: Optional[List[int]] = None, dropout: float = 0.2) -> None:
         super(ImprovedVAE, self).__init__()
 
         if hidden_dims is None:
@@ -74,19 +74,20 @@ class ImprovedVAE(nn.Module):
         decoder_layers.append(nn.Linear(prev_dim, input_dim))
         self.decoder = nn.Sequential(*decoder_layers)
 
-    def reparameterize(self, mu, logvar):
+    def reparameterize(self, mu: torch.Tensor, logvar: torch.Tensor) -> torch.Tensor:
         std = torch.exp(0.5 * logvar)
         eps = torch.randn_like(std)
         return mu + eps * std
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         h = self.encoder(x)
         mu, logvar = self.mu(h), self.logvar(h)
         z = self.reparameterize(mu, logvar)
         return self.decoder(z), mu, logvar
 
 
-def improved_vae_loss(recon_x, x, mu, logvar, beta=0.001):
+def improved_vae_loss(recon_x: torch.Tensor, x: torch.Tensor, 
+                      mu: torch.Tensor, logvar: torch.Tensor, beta: float = 0.001) -> torch.Tensor:
     """Improved VAE loss with beta-VAE regularization."""
     recon_loss = nn.MSELoss(reduction='sum')(recon_x, x)
     kl_loss = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())

@@ -5,7 +5,7 @@ Configuration dataclass and utilities for scVAE-Annotator.
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Any
 
 
 # Logging setup
@@ -69,7 +69,7 @@ class Config:
     output_dir: str = './results'
     random_state: int = 42
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         Path(self.output_dir).mkdir(parents=True, exist_ok=True)
 
 

@@ -2,7 +2,7 @@
 Clustering functions for scVAE-Annotator.
 """
 
-from typing import Tuple
+from typing import Tuple, Dict, Any, List
 
 import anndata as ad
 import numpy as np
@@ -17,7 +17,7 @@ def optimized_leiden_clustering(adata: ad.AnnData, config: Config) -> Tuple[ad.A
     """Optimized Leiden clustering with adaptive metrics."""
     logger.info("Starting Leiden clustering optimization...")
 
-    resolutions = np.linspace(*config.leiden_resolution_range, config.leiden_resolution_steps)
+    resolutions: np.ndarray = np.linspace(*config.leiden_resolution_range, config.leiden_resolution_steps)
     best_res, best_score = config.leiden_resolution_range[0], -1
     best_n_clusters = 0
 

@@ -3,7 +3,7 @@ Preprocessing functions for scVAE-Annotator.
 """
 
 import os
-from typing import List
+from typing import List, Dict, Any
 
 import anndata as ad
 import numpy as np
@@ -45,7 +45,7 @@ def discover_marker_genes(adata: ad.AnnData, config: Config) -> List[str]:
     return all_markers
 
 
-def download_data():
+def download_data() -> None:
     """Download required data files with error handling."""
     from pathlib import Path
     

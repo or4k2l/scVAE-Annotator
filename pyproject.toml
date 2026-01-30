@@ -48,6 +48,10 @@ dev = [
     "pytest>=7.0.0",
     "pytest-cov>=3.0.0",
     "pytest-xdist>=3.0.0",
+    "pytest-mock>=3.10.0",
+    "mypy>=1.0.0",
+    "types-requests>=2.28.0",
+    "types-setuptools>=65.0.0",
     "pytest-timeout>=2.1.0",
     "black>=22.0.0",
     "flake8>=4.0.0",
@@ -158,9 +162,42 @@ directory = "htmlcov"
 
 [tool.mypy]
 python_version = "3.8"
+# Strict mode settings
+strict = true
 warn_return_any = true
 warn_unused_configs = true
-disallow_untyped_defs = false
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_unreachable = true
+no_implicit_reexport = true
+strict_equality = true
+strict_concatenate = true
+
+# Ignore missing imports for third-party libraries without stubs
+[[tool.mypy.overrides]]
+module = [
+    "scanpy.*",
+    "anndata.*",
+    "leidenalg.*",
+    "igraph.*",
+    "harmony.*",
+    "harmonypy.*",
+    "optuna.*",
+    "sklearn.*",
+    "imblearn.*",
+    "xgboost.*",
+    "scipy.*",
+    "torch.*",
+    "seaborn.*",
+]
 ignore_missing_imports = true
 
 [tool.pylint.messages_control]
@@ -172,4 +209,29 @@ disable = [
     "C0116",
     "R0913",
     "R0914",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--cov=src/scvae_annotator",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=0",  # Will be increased to 90 once achieved
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "cuda: marks tests that require CUDA",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
 ]
