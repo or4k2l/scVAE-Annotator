@@ -1,93 +1,54 @@
 """
-Visualization utilities for scVAE-Annotator.
+Visualization functions for scVAE-Annotator.
 """
 
+import anndata as ad
 import matplotlib.pyplot as plt
-import seaborn as sns
 import scanpy as sc
-from typing import Optional
-import pandas as pd
+
+from .config import Config, logger
 
 
-def plot_umap(
-    adata: "anndata.AnnData",
-    annotations: Optional[pd.DataFrame] = None,
-    save: Optional[str] = None
-):
-    """
-    Create UMAP visualization.
-    
-    Parameters
-    ----------
-    adata : AnnData
-        AnnData object with UMAP coordinates
-    annotations : DataFrame, optional
-        Cell type annotations
-    save : str, optional
-        Path to save figure
-    """
-    fig, ax = plt.subplots(figsize=(10, 8))
-    
-    if annotations is not None and 'cell_type' in annotations.columns:
-        # Color by cell type
-        sc.pl.umap(adata, color='leiden', ax=ax, show=False)
-    else:
-        # Color by cluster
-        sc.pl.umap(adata, color='leiden', ax=ax, show=False)
-    
-    if save:
-        plt.savefig(save, dpi=300, bbox_inches='tight')
-    else:
-        plt.show()
-        
+def create_visualizations(adata: ad.AnnData, config: Config):
+    """Create comprehensive visualizations with reproducible UMAP."""
+    sc.tl.umap(adata, random_state=config.random_state)
+
+    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+    plot_configs = [
+        ('cell_type_ground_truth', 'Ground Truth'),
+        ('autoencoder_predictions', 'Predictions'),
+        ('leiden_labels', 'Leiden Clusters'),
+        ('autoencoder_confidence', 'Prediction Confidence')
+    ]
+
+    for i, (col, title) in enumerate(plot_configs):
+        if col in adata.obs.columns:
+            sc.pl.umap(adata, color=col, ax=axes[i//2, i%2], show=False, frameon=False)
+            axes[i//2, i%2].set_title(title)
+
+    plt.tight_layout()
+    plt.savefig(f"{config.output_dir}/umap_comparison.png", dpi=300, bbox_inches='tight')
     plt.close()
 
+    if 'autoencoder_confidence' in adata.obs:
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
-def plot_marker_genes(
-    adata: "anndata.AnnData",
-    marker_genes: list,
-    groupby: str = 'leiden',
-    save: Optional[str] = None
-):
-    """
-    Plot marker gene expression.
-    
-    Parameters
-    ----------
-    adata : AnnData
-        AnnData object
-    marker_genes : list
-        List of marker genes to plot
-    groupby : str, default='leiden'
-        Column to group by
-    save : str, optional
-        Path to save figure
-    """
-    sc.pl.dotplot(adata, marker_genes, groupby=groupby, save=save)
+        adata.obs['autoencoder_confidence'].hist(bins=50, ax=ax1)
+        ax1.axvline(config.confidence_threshold, color='red', linestyle='--',
+                   label=f'Threshold: {config.confidence_threshold:.3f}')
+        ax1.set_xlabel('Prediction Confidence')
+        ax1.set_ylabel('Number of Cells')
+        ax1.set_title('Confidence Score Distribution')
+        ax1.legend()
 
+        if 'cell_type_ground_truth' in adata.obs:
+            conf_by_type = adata.obs.groupby('cell_type_ground_truth')['autoencoder_confidence'].mean()
+            conf_by_type.plot(kind='bar', ax=ax2, rot=45)
+            ax2.set_xlabel('Cell Type')
+            ax2.set_ylabel('Average Confidence')
+            ax2.set_title('Average Confidence by Cell Type')
 
-def plot_training_history(history: dict, save: Optional[str] = None):
-    """
-    Plot training loss history.
-    
-    Parameters
-    ----------
-    history : dict
-        Training history
-    save : str, optional
-        Path to save figure
-    """
-    fig, ax = plt.subplots(figsize=(10, 6))
-    
-    ax.plot(history['loss'], label='Training Loss')
-    ax.set_xlabel('Epoch')
-    ax.set_ylabel('Loss')
-    ax.set_title('Training History')
-    ax.legend()
-    
-    if save:
-        plt.savefig(save, dpi=300, bbox_inches='tight')
-    else:
-        plt.show()
-        
-    plt.close()
+        plt.tight_layout()
+        plt.savefig(f"{config.output_dir}/confidence_analysis.png", dpi=300, bbox_inches='tight')
+        plt.close()

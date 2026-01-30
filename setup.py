@@ -26,7 +26,6 @@ setup(
     },
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    py_modules=["scvae_annotator"],
     python_requires=">=3.8",
     install_requires=requirements,
     extras_require={

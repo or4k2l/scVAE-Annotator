@@ -7,9 +7,6 @@ An optimized pipeline for automated cell type annotation using:
 - Hyperparameter optimization with Optuna
 - Calibrated confidence scoring
 
-Note: Main implementation is located in scvae_annotator.py in the root directory.
-This package serves as a structure for future modularization.
-
 Usage:
     from scvae_annotator import create_optimized_config, run_annotation_pipeline
     
@@ -20,53 +17,59 @@ Usage:
 __version__ = "0.1.0"
 __author__ = "scVAE-Annotator Team"
 
-# Note: Main implementation is in scvae_annotator.py at root level
-# This package structure is for future modularization
+# Import core components from refactored modules
+from .config import Config, create_optimized_config, logger
+from .preprocessing import (
+    discover_marker_genes,
+    download_data,
+    load_and_prepare_data,
+    enhanced_preprocessing
+)
+from .clustering import optimized_leiden_clustering
+from .vae import (
+    EarlyStopping,
+    ImprovedVAE,
+    improved_vae_loss,
+    train_improved_vae
+)
+from .annotator import EnhancedAutoencoderAnnotator
+from .visualization import create_visualizations
+from .pipeline import (
+    evaluate_predictions,
+    run_annotation_pipeline,
+    analyze_optimization_results
+)
 
-try:
-    import sys
-    from pathlib import Path
+__all__ = [
+    # Core config
+    "Config",
+    "create_optimized_config",
+    "logger",
     
-    # Add root directory to path to import main implementation
-    root_dir = Path(__file__).parent.parent.parent
-    if str(root_dir) not in sys.path:
-        sys.path.insert(0, str(root_dir))
+    # Preprocessing
+    "discover_marker_genes",
+    "download_data",
+    "load_and_prepare_data",
+    "enhanced_preprocessing",
     
-    # Import main components from root-level implementation
-    from scvae_annotator import (
-        Config,
-        create_optimized_config,
-        run_annotation_pipeline,
-        analyze_optimization_results,
-        create_visualizations,
-        load_and_prepare_data,
-        enhanced_preprocessing,
-        optimized_leiden_clustering,
-        train_improved_vae,
-        EnhancedAutoencoderAnnotator
-    )
+    # Clustering
+    "optimized_leiden_clustering",
     
-    __all__ = [
-        "Config",
-        "create_optimized_config",
-        "run_annotation_pipeline",
-        "analyze_optimization_results",
-        "create_visualizations",
-        "load_and_prepare_data",
-        "enhanced_preprocessing",
-        "optimized_leiden_clustering",
-        "train_improved_vae",
-        "EnhancedAutoencoderAnnotator",
-        "__version__"
-    ]
+    # VAE Model
+    "EarlyStopping",
+    "ImprovedVAE",
+    "improved_vae_loss",
+    "train_improved_vae",
     
-except ImportError:
-    # Fallback: Try to import legacy modules (for backwards compatibility)
-    try:
-        from .annotator import Annotator
-        from .model import VAEModel
-        __all__ = ["Annotator", "VAEModel", "__version__"]
-    except ImportError:
-        # No modules available
-        __all__ = ["__version__"]
+    # Annotator
+    "EnhancedAutoencoderAnnotator",
+    
+    # Visualization
+    "create_visualizations",
+    
+    # Pipeline
+    "evaluate_predictions",
+    "run_annotation_pipeline",
+    "analyze_optimization_results",
+]
 
