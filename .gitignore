@@ -74,6 +74,7 @@ results/
 *.png
 *.pdf
 *.svg
+!figures/poisson_vs_mse_comparison.png
 
 # Logs
 *.log

@@ -1,5 +1,17 @@
 # scVAE-Annotator Examples
 
+## Complete Pipeline (PBMC 10k)
+
+Run the end-to-end Poisson vs MSE comparison and save the figure:
+
+```bash
+python examples/pbmc_10k_complete_pipeline.py
+```
+
+Outputs:
+- Script: [examples/pbmc_10k_complete_pipeline.py](examples/pbmc_10k_complete_pipeline.py)
+- Figure: [figures/poisson_vs_mse_comparison.png](figures/poisson_vs_mse_comparison.png)
+
 ## Quick Start
 
 ```python

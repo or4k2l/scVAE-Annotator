@@ -29,7 +29,23 @@ export SCIPY_ARRAY_API=0  # or try =1 if 0 doesn't work
 
 ## Available Examples
 
-### 1. Basic Example (`basic_example.py`)
+### 1. Complete Pipeline (PBMC 10k)
+
+Run the full Poisson-vs-MSE comparison pipeline and save the figure:
+
+```bash
+python examples/pbmc_10k_complete_pipeline.py
+```
+
+Outputs:
+- Figure: [figures/poisson_vs_mse_comparison.png](../figures/poisson_vs_mse_comparison.png)
+
+**Requirements:**
+- Internet connection (downloads PBMC 10k on first run)
+- ~500MB disk space for the dataset
+- Estimated runtime: 15–40 minutes depending on hardware
+
+### 2. Basic Example (`basic_example.py`)
 
 Complete end-to-end example with the PBMC 10k dataset:
 
@@ -48,7 +64,7 @@ This example demonstrates:
 - ~500MB disk space for PBMC 10k dataset
 - Estimated runtime: 5-15 minutes (depending on hardware)
 
-### 2. CLI Examples (`cli_examples.sh`)
+### 3. CLI Examples (`cli_examples.sh`)
 
 Command-line examples for various use cases:
 
