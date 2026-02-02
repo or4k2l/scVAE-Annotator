@@ -1,4 +1,4 @@
-# @title 🏆 scVAE-Annotator: Complete Pipeline (PBMC 10k) - English Version
+# @title 🏆 scVAE-Annotator: Complete Pipeline (PBMC 10k) 
 # ==========================================
 # 0. IMPORTS & SETUP
 # ==========================================
