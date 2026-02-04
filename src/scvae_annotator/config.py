@@ -83,8 +83,25 @@ class Config:
     # Output paths
     output_dir: str = 'results'
     random_state: int = 42
+    
+    # Scientific modeling parameters
+    likelihood_type: str = 'mse'  # 'mse' or 'poisson'
+    warmup_epochs: int = 10       # KL annealing epochs
+    kl_warmup_start: float = 0.0  # Starting KL weight
+    kl_warmup_end: float = 1.0    # Final KL weight
+    
+    # Stability parameters
+    logvar_clip_min: float = -10.0
+    logvar_clip_max: float = 10.0
+    recon_clip_min: float = -10.0
+    recon_clip_max: float = 15.0   # exp(15) ≈ 3.2M counts
 
     def __post_init__(self) -> None:
+        """Validate configuration."""
+        if self.likelihood_type not in ['mse', 'poisson']:
+            raise ValueError("likelihood_type must be 'mse' or 'poisson'")
+        if self.warmup_epochs < 0:
+            raise ValueError("warmup_epochs must be non-negative")
         self._target_genes_explicit = self.target_genes is not None
         self._leiden_resolution_explicit = self.leiden_resolution is not None
         self._min_genes_explicit = self.min_genes is not None
@@ -126,36 +143,91 @@ class Config:
         Path(self.output_dir).mkdir(parents=True, exist_ok=True)
 
 
-def create_optimized_config() -> Config:
-    """Create an optimized configuration."""
-    return Config(
-        target_genes=2000,
-        n_neighbors=30,
-        leiden_resolution=0.4,
-        latent_dim=32,
-        vae_epochs=100,
-        early_stopping_patience=10,
-        leiden_resolution_range=(0.01, 0.2),
-        leiden_resolution_steps=15,
-        leiden_k_neighbors=30,
-        autoencoder_embedding_dim=32,
-        autoencoder_hidden_dims=[512, 256, 128, 64],
-        autoencoder_epochs=100,
-        autoencoder_batch_size=128,
-        autoencoder_lr=0.001,
-        autoencoder_dropout=0.1,
-        autoencoder_patience=7,
-        confidence_threshold=0.7,
-        adaptive_quantile=0.05,
-        use_smote=True,
-        cross_validation_folds=3,
-        use_hyperparameter_optimization=True,
-        optuna_trials=50,
-        subsample_optuna_train=5000,
-        n_top_genes=3000,
-        min_genes_per_cell=200,
-        max_mt_percent=20,
-        min_ground_truth_ratio=0.7,
-        random_state=42,
-        n_jobs=-1
-    )
+def create_optimized_config(**kwargs: Any) -> Config:
+    """
+    Create optimized configuration (MSE likelihood - backward compatible).
+    
+    This configuration is optimized for:
+    - Log-normalized data
+    - Scaled/centered data
+    - Traditional preprocessing pipelines
+    
+    Parameters
+    ----------
+    **kwargs : Any
+        Additional configuration parameters to override defaults
+        
+    Returns
+    -------
+    Config
+        Optimized configuration instance
+    """
+    defaults = {
+        'target_genes': 2000,
+        'n_neighbors': 30,
+        'leiden_resolution': 0.4,
+        'latent_dim': 32,
+        'vae_epochs': 100,
+        'early_stopping_patience': 10,
+        'leiden_resolution_range': (0.01, 0.2),
+        'leiden_resolution_steps': 15,
+        'leiden_k_neighbors': 30,
+        'autoencoder_embedding_dim': 32,
+        'autoencoder_hidden_dims': [512, 256, 128, 64],
+        'autoencoder_epochs': 100,
+        'autoencoder_batch_size': 128,
+        'autoencoder_lr': 0.001,
+        'autoencoder_dropout': 0.1,
+        'autoencoder_patience': 7,
+        'confidence_threshold': 0.7,
+        'adaptive_quantile': 0.05,
+        'use_smote': True,
+        'cross_validation_folds': 3,
+        'use_hyperparameter_optimization': True,
+        'optuna_trials': 50,
+        'subsample_optuna_train': 5000,
+        'n_top_genes': 3000,
+        'min_genes_per_cell': 200,
+        'max_mt_percent': 20,
+        'min_ground_truth_ratio': 0.7,
+        'random_state': 42,
+        'n_jobs': -1,
+        'likelihood_type': 'mse',  # Conservative default
+        'warmup_epochs': 10,
+    }
+    defaults.update(kwargs)
+    return Config(**defaults)
+
+
+def create_scientific_config(**kwargs: Any) -> Config:
+    """
+    Create configuration optimized for count data (Poisson likelihood).
+    
+    This configuration is optimal for:
+    - Raw or minimally processed 10x Genomics data
+    - UMI count data
+    - Data with preserved count structure
+    
+    References
+    ----------
+    Grønbech et al. (2020). scVAE: Variational auto-encoders for 
+    single-cell gene expression data. Bioinformatics, 36(16), 4415-4422.
+    
+    Parameters
+    ----------
+    **kwargs : Any
+        Additional configuration parameters to override defaults
+        
+    Returns
+    -------
+    Config
+        Scientific configuration instance optimized for count data
+    """
+    defaults = {
+        'likelihood_type': 'poisson',
+        'warmup_epochs': 10,
+        'autoencoder_lr': 5e-4,  # More conservative for Poisson
+        'output_dir': './results_scientific',
+    }
+    defaults.update(kwargs)
+    return Config(**defaults)

@@ -18,7 +18,7 @@ __version__ = "0.1.0"
 __author__ = "scVAE-Annotator Team"
 
 # Import core components from refactored modules
-from .config import Config, create_optimized_config, logger
+from .config import Config, create_optimized_config, create_scientific_config, logger
 from .preprocessing import (
     discover_marker_genes,
     download_data,
@@ -53,6 +53,7 @@ __all__ = [
     # Core config
     "Config",
     "create_optimized_config",
+    "create_scientific_config",
     "logger",
     
     # Preprocessing
