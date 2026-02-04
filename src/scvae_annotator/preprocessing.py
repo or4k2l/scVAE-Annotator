@@ -69,12 +69,34 @@ def download_data() -> None:
 
 
 def load_and_prepare_data(data_path: str = './data/10x-Multiome-Pbmc10k-RNA.h5') -> ad.AnnData:
-    """Load data with comprehensive error handling."""
+    """Load and prepare single-cell data with automatic format detection."""
+    logger.info(f"Loading data from {data_path}")
+    
     try:
-        adata = sc.read_10x_h5(data_path)
+        # Automatic format detection based on file extension
+        if data_path.endswith('.h5ad'):
+            adata = sc.read_h5ad(data_path)
+            logger.info("Loaded H5AD format")
+        elif data_path.endswith('.h5'):
+            adata = sc.read_10x_h5(data_path)
+            logger.info("Loaded 10x H5 format")
+        elif 'matrix.mtx' in data_path or os.path.isdir(data_path):
+            adata = sc.read_10x_mtx(data_path)
+            logger.info("Loaded 10x MTX format")
+        else:
+            # Fallback: Try H5AD first, then 10x H5
+            try:
+                adata = sc.read_h5ad(data_path)
+                logger.info("Loaded as H5AD (fallback)")
+            except:
+                adata = sc.read_10x_h5(data_path)
+                logger.info("Loaded as 10x H5 (fallback)")
+        
+        # Make gene names unique (critical for 10x data)
         adata.var_names_make_unique()
         logger.info(f"Loaded data: {adata.shape[0]} cells, {adata.shape[1]} genes")
         return adata
+        
     except Exception as e:
         logger.error(f"Error loading data: {e}")
         raise
