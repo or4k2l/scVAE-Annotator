@@ -80,7 +80,7 @@ def load_and_prepare_data(data_path: str = './data/10x-Multiome-Pbmc10k-RNA.h5')
         elif data_path.endswith('.h5'):
             adata = sc.read_10x_h5(data_path)
             logger.info("Loaded 10x H5 format")
-        elif 'matrix.mtx' in data_path or os.path.isdir(data_path):
+        elif os.path.isdir(data_path) or 'matrix.mtx' in os.path.basename(data_path):
             adata = sc.read_10x_mtx(data_path)
             logger.info("Loaded 10x MTX format")
         else:
@@ -88,7 +88,8 @@ def load_and_prepare_data(data_path: str = './data/10x-Multiome-Pbmc10k-RNA.h5')
             try:
                 adata = sc.read_h5ad(data_path)
                 logger.info("Loaded as H5AD (fallback)")
-            except:
+            except Exception as e:
+                logger.debug(f"H5AD loading failed: {e}, trying 10x H5 format")
                 adata = sc.read_10x_h5(data_path)
                 logger.info("Loaded as 10x H5 (fallback)")
         

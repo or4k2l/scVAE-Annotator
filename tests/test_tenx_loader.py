@@ -25,6 +25,7 @@ def mock_10x_adata():
     adata.var_names = [f"GENE_{i}" for i in range(n_vars)]
     
     # Add 10x-specific metadata
+    # Format matches Ensembl gene IDs: ENSG followed by 11 digits (zero-padded)
     adata.var['gene_ids'] = [f"ENSG{i:011d}" for i in range(n_vars)]
     adata.var['feature_types'] = ['Gene Expression'] * n_vars
     adata.var['genome'] = ['GRCh38'] * n_vars

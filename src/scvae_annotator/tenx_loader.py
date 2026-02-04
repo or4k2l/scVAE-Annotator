@@ -114,7 +114,10 @@ def detect_10x_chemistry(adata: ad.AnnData) -> Optional[str]:
         elif 'v2' in desc.lower():
             return 'v2'
     
-    # Heuristic: v3 typically has more genes per cell
+    # Heuristic based on gene count:
+    # - v3 chemistry typically detects >30,000 features (genes)
+    # - v2 chemistry typically detects 20,000-30,000 features
+    # Reference: 10x Genomics technical specifications
     if adata.n_vars > 30000:
         return 'v3 (inferred)'
     elif adata.n_vars > 20000:
