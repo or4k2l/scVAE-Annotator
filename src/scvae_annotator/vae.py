@@ -77,6 +77,13 @@ class ImprovedVAE(nn.Module):
         self.decoder = nn.Sequential(*decoder_layers)
 
     def reparameterize(self, mu: torch.Tensor, logvar: torch.Tensor) -> torch.Tensor:
+        """
+        Reparameterization trick for VAE with numerical stability.
+        
+        Clamps logvar to prevent numerical overflow/underflow.
+        """
+        # Clamp logvar for numerical stability
+        logvar = torch.clamp(logvar, min=-10.0, max=10.0)
         std = torch.exp(0.5 * logvar)
         eps = torch.randn_like(std)
         return mu + eps * std
