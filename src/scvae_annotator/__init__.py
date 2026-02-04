@@ -43,6 +43,11 @@ from .pipeline import (
     run_annotation_pipeline,
     analyze_optimization_results
 )
+from .tenx_loader import (
+    load_10x_data,
+    detect_10x_chemistry,
+    get_10x_metadata_summary
+)
 
 __all__ = [
     # Core config
@@ -76,5 +81,10 @@ __all__ = [
     "evaluate_predictions",
     "run_annotation_pipeline",
     "analyze_optimization_results",
+    
+    # 10x Genomics support
+    "load_10x_data",
+    "detect_10x_chemistry",
+    "get_10x_metadata_summary",
 ]
 

@@ -42,6 +42,31 @@ scVAE-Annotator is an optimized pipeline for automated cell type annotation in s
 - ✅ **Reproducible UMAP visualizations** with fixed random state
 - ✅ **Comprehensive evaluation and visualization**
 
+## 🧬 10x Genomics Integration
+
+scVAE-Annotator natively supports 10x Genomics single-cell data:
+
+```python
+from scvae_annotator import run_annotation_pipeline, create_optimized_config
+from scvae_annotator.tenx_loader import load_10x_data
+
+# Load 10x Cell Ranger output
+adata = load_10x_data('filtered_feature_bc_matrix/')
+
+# Run annotation
+config = create_optimized_config()
+adata = run_annotation_pipeline(config, adata=adata)
+```
+
+**Supported formats:**
+- ✅ Cell Ranger MTX output (`filtered_feature_bc_matrix/`)
+- ✅ Cell Ranger H5 files (`.h5`)
+- ✅ Pre-processed H5AD files (`.h5ad`)
+
+**Try it now:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo.ipynb)
+
+📖 **Full guide:** [10x Genomics Integration Guide](docs/10X_GENOMICS_GUIDE.md)
+
 ## 🚀 Installation
 
 ### Prerequisites
