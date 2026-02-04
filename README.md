@@ -131,6 +131,52 @@ python examples/basic_example.py
 
 This will download the PBMC 10k dataset and run the complete annotation pipeline.
 
+## 🔬 Scientific Features
+
+scVAE-Annotator supports scientifically-grounded modeling for count data:
+
+### Poisson Likelihood for 10x Data
+
+For optimal results with raw 10x Genomics count data:
+
+```python
+from scvae_annotator import create_scientific_config, run_annotation_pipeline
+
+# Optimized for count data
+config = create_scientific_config(
+    autoencoder_epochs=50,
+    warmup_epochs=10  # KL annealing
+)
+
+results = run_annotation_pipeline(config, data_path='10x_data/')
+```
+
+### MSE vs Poisson Comparison
+
+See our [Google Colab demo](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo.ipynb) for an interactive comparison showing:
+- Performance differences on PBMC data
+- Biological validation with canonical markers
+- Interactive visualizations
+
+### When to Use Each?
+
+| Data Type | Config Function | Likelihood |
+|-----------|-----------------|------------|
+| Raw 10x counts | `create_scientific_config()` ⭐ | Poisson |
+| Log-normalized | `create_optimized_config()` | MSE |
+| Scaled/centered | `create_optimized_config()` | MSE |
+
+### Scientific References
+
+- **Grønbech et al. (2020)**. scVAE: Variational auto-encoders for single-cell gene expression data. *Bioinformatics*, 36(16), 4415-4422. [DOI: 10.1093/bioinformatics/btaa293](https://doi.org/10.1093/bioinformatics/btaa293)
+- **Lopez et al. (2018)**. Deep generative modeling for single-cell transcriptomics. *Nature Methods*, 15, 1053–1058. [DOI: 10.1038/s41592-018-0229-2](https://doi.org/10.1038/s41592-018-0229-2)
+
+### Implementation Details
+
+- **KL Warm-up**: Linear annealing over 10 epochs prevents posterior collapse
+- **Numerical Stability**: Logit clamping prevents overflow (exp(15) ≈ 3.2M counts)
+- **Automatic Data Selection**: Uses raw counts when available in `adata.layers['counts']`
+
 ### Simple Example
 
 ```python
