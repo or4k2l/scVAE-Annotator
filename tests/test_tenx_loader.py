@@ -61,13 +61,16 @@ class TestLoad10xData:
 class TestDetect10xChemistry:
     """Tests for chemistry detection."""
     
-    def test_detect_v3(self, mock_10x_adata):
+    def test_detect_v3(self):
         """Test v3 chemistry detection."""
         # Simulate v3 with many genes
-        mock_10x_adata_v3 = mock_10x_adata.copy()
+        n_obs, n_vars = 100, 35000  # v3 typically has >30k genes
+        X = np.random.negative_binomial(5, 0.3, (n_obs, n_vars))
+        adata_v3 = ad.AnnData(X=X.astype(np.float32))
         
-        chemistry = detect_10x_chemistry(mock_10x_adata_v3)
+        chemistry = detect_10x_chemistry(adata_v3)
         assert chemistry is not None
+        assert 'v3' in chemistry.lower()
     
     def test_detect_from_uns(self):
         """Test chemistry detection from uns."""
@@ -76,6 +79,13 @@ class TestDetect10xChemistry:
         
         chemistry = detect_10x_chemistry(adata)
         assert chemistry == 'v3'
+    
+    def test_detect_none(self):
+        """Test chemistry detection returns None for small datasets."""
+        adata = ad.AnnData(np.random.randn(10, 100))
+        
+        chemistry = detect_10x_chemistry(adata)
+        assert chemistry is None
 
 
 class TestGet10xMetadataSummary:
