@@ -112,6 +112,30 @@ class TestImprovedVAE:
         
         assert z.shape == (32, 10)
 
+    def test_reparameterize_extreme_values(self) -> None:
+        """Test reparameterize with extreme values for numerical stability."""
+        model = ImprovedVAE(input_dim=100, embedding_dim=10)
+        
+        # Test with extreme values (should not crash)
+        mu = torch.randn(32, 10)
+        logvar = torch.randn(32, 10) * 100  # Extreme values
+        
+        # Should clamp and return valid tensor
+        z = model.reparameterize(mu, logvar)
+        
+        assert z.shape == (32, 10)
+        assert torch.isfinite(z).all(), "Output should be finite (no NaN/Inf)"
+        
+        # Test with very large positive logvar
+        logvar_large = torch.ones(32, 10) * 50
+        z_large = model.reparameterize(mu, logvar_large)
+        assert torch.isfinite(z_large).all()
+        
+        # Test with very large negative logvar
+        logvar_small = torch.ones(32, 10) * -50
+        z_small = model.reparameterize(mu, logvar_small)
+        assert torch.isfinite(z_small).all()
+
     def test_model_training_mode(self) -> None:
         """Test model can switch between train and eval modes."""
         model = ImprovedVAE(input_dim=50)
