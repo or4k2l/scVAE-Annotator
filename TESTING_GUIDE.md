@@ -1,17 +1,17 @@
 # Testing Guide - scVAE-Annotator
 
-## 🎯 Test-Strategie
+## 🎯 Test Strategy
 
-Dieses Projekt folgt einer strikten Test-Philosophie:
-- **90%+ Coverage** als Minimalziel für Production-Code
-- **mypy strict mode** mit 100% Type-Safety
-- **pytest** als primäres Test-Framework
-- **Comprehensive Testing**: Unit → Integration → End-to-End
+This project follows a strict testing philosophy:
+- **90%+ coverage** as the minimum goal for production code
+- **mypy strict mode** with 100% type safety
+- **pytest** as the primary test framework
+- **Comprehensive testing**: Unit → Integration → End-to-End
 
-## 📊 Aktueller Status
+## 📊 Current Status
 
-| Modul | Coverage | Tests | Status |
-|-------|----------|-------|--------|
+| Module | Coverage | Tests | Status |
+|--------|----------|-------|--------|
 | config.py | 97.78% | 14 ✅ | EXCELLENT |
 | vae.py | 100% | 17 ✅ | PERFECT |
 | preprocessing.py | 81% | 19 (mixed) | GOOD |
@@ -20,49 +20,49 @@ Dieses Projekt folgt einer strikten Test-Philosophie:
 | pipeline.py | 9.18% | 0 | CRITICAL |
 | visualization.py | 14.63% | 0 | CRITICAL |
 | cli.py | 0% | 0 | CRITICAL |
-| **GESAMT** | **31.10%** | 30 ✅ / 19 ❌ | IN_PROGRESS |
+| **TOTAL** | **31.10%** | 30 ✅ / 19 ❌ | IN_PROGRESS |
 
-## 🚀 Schnellstart
+## 🚀 Quick Start
 
-### Installation Test-Dependencies
+### Install test dependencies
 
 ```bash
 pip install pytest pytest-cov pytest-mock mypy
 ```
 
-### Tests ausführen
+### Run tests
 
 ```bash
-# Alle Tests
+# All tests
 pytest tests/ -v
 
-# Mit Coverage-Report
+# With coverage report
 pytest tests/ --cov=src/scvae_annotator --cov-report=html --cov-report=term
 
-# Nur erfolgreiche Tests
+# Only passing tests
 pytest tests/test_config.py tests/test_vae.py -v
 
-# Bestimmtes Modul testen
+# Test a specific module
 pytest tests/test_config.py -v --tb=short
 ```
 
-### Type-Checking
+### Type checking
 
 ```bash
-# Komplettes Projekt
+# Entire project
 mypy src/scvae_annotator
 
-# Einzelnes Modul
+# Single module
 mypy src/scvae_annotator/config.py
 ```
 
-## 📝 Test-Struktur
+## 📝 Test Structure
 
-### Erfolgreich implementiert
+### Fully implemented
 
-#### 1. **test_config.py** (14 Tests, 97.78% Coverage)
+#### 1. **test_config.py** (14 tests, 97.78% coverage)
 ```python
-# Abgedeckt:
+# Covered:
 ✅ Config dataclass validation
 ✅ Parameter constraints (batch_size, epochs, etc.)
 ✅ Random seed handling
@@ -71,7 +71,7 @@ mypy src/scvae_annotator/config.py
 ✅ Type safety (int/float conversions)
 ```
 
-**Beispiel:**
+**Example:**
 ```python
 def test_config_creation():
     config = Config(
@@ -83,18 +83,18 @@ def test_config_creation():
     assert config.max_epochs == 100
 ```
 
-#### 2. **test_vae.py** (17 Tests, 100% Coverage)
+#### 2. **test_vae.py** (17 tests, 100% coverage)
 ```python
-# Abgedeckt:
+# Covered:
 ✅ EarlyStopping logic (patience, delta)
 ✅ ImprovedVAE forward/loss
-✅ train_improved_vae() mit verschiedenen Configs
-✅ CUDA handling (automatisches Fallback zu CPU)
-✅ Loss computation und convergence
-✅ Edge cases (leeres Training, single batch)
+✅ train_improved_vae() with different configs
+✅ CUDA handling (automatic fallback to CPU)
+✅ Loss computation and convergence
+✅ Edge cases (empty training, single batch)
 ```
 
-**Beispiel:**
+**Example:**
 ```python
 def test_vae_training():
     adata = create_test_adata(n_obs=100, n_vars=50)
@@ -103,92 +103,92 @@ def test_vae_training():
     assert all(loss >= 0 for loss in losses)
 ```
 
-### Teilweise implementiert
+### Partially implemented
 
-#### 3. **test_preprocessing.py** (19 Tests, 81% Coverage)
+#### 3. **test_preprocessing.py** (19 tests, 81% coverage)
 ```python
-# Abgedeckt:
-✅ enhanced_preprocessing() basis
+# Covered:
+✅ enhanced_preprocessing() basics
 ✅ discover_marker_genes()
-⚠️ QC-Filtering führt oft zu leeren Daten
-⚠️ Test-Fixtures benötigen realistische Metriken
+⚠️ QC filtering often yields empty data
+⚠️ Test fixtures need realistic metrics
 ```
 
-**Probleme:**
-- Synthetic data überlebt QC-Filter nicht
-- `n_genes_by_counts` und `pct_counts_mt` fehlen oft
-- Empfehlung: Robustere Fixture-Generierung
+**Issues:**
+- Synthetic data does not survive QC filters
+- `n_genes_by_counts` and `pct_counts_mt` are often missing
+- Recommendation: more robust fixture generation
 
-#### 4. **test_clustering.py** (8 Tests, 41.82% Coverage)
+#### 4. **test_clustering.py** (8 tests, 41.82% coverage)
 ```python
-# Abgedeckt:
-✅ optimized_leiden_clustering() Basis
-⚠️ Fehlt: PCA/neighbors-Setup in Fixtures
-⚠️ Fehlt: ARI/Silhouette-Metriken
+# Covered:
+✅ optimized_leiden_clustering() basics
+⚠️ Missing: PCA/neighbors setup in fixtures
+⚠️ Missing: ARI/Silhouette metrics
 ```
 
-**Probleme:**
-- Test-Daten haben keine `.obsm['X_pca']`
-- Clustering schlägt fehl ohne neighbors graph
-- Empfehlung: `sc.pp.neighbors()` in Fixtures
+**Issues:**
+- Test data lacks `.obsm['X_pca']`
+- Clustering fails without a neighbors graph
+- Recommendation: run `sc.pp.neighbors()` in fixtures
 
-### Noch nicht implementiert
+### Not yet implemented
 
-#### 5. **test_annotator.py** (0% Coverage - KRITISCH)
+#### 5. **test_annotator.py** (0% coverage - CRITICAL)
 ```python
-# Benötigt:
+# Needed:
 ❌ EnhancedAutoencoderAnnotator.__init__()
-❌ train() mit Optuna-Optimization
-❌ predict() mit Confidence-Scores
-❌ SMOTE-Handling für imbalanced data
+❌ train() with Optuna optimization
+❌ predict() with confidence scores
+❌ SMOTE handling for imbalanced data
 ❌ Calibration (Platt scaling)
 ❌ Edge cases (unknown labels, single class)
 ```
 
-**Priorität:** HIGH - Core-Funktionalität
+**Priority:** HIGH - Core functionality
 
-#### 6. **test_pipeline.py** (0% Coverage - KRITISCH)
+#### 6. **test_pipeline.py** (0% coverage - CRITICAL)
 ```python
-# Benötigt:
-❌ run_annotation_pipeline() End-to-End
-❌ evaluate_predictions() Metriken
+# Needed:
+❌ run_annotation_pipeline() end-to-end
+❌ evaluate_predictions() metrics
 ❌ analyze_optimization_results()
-❌ save_results() File-Handling
+❌ save_results() file handling
 ❌ Integration: preprocessing → clustering → VAE → annotator
 ```
 
-**Priorität:** HIGH - Orchestrierung
+**Priority:** HIGH - Orchestration
 
-#### 7. **test_visualization.py** (0% Coverage)
+#### 7. **test_visualization.py** (0% coverage)
 ```python
-# Benötigt:
-❌ create_visualizations() Plot-Generierung
+# Needed:
+❌ create_visualizations() plot generation
 ❌ UMAP consistency
 ❌ Confidence plots
-❌ File-Saving (PNG/PDF)
+❌ File saving (PNG/PDF)
 ```
 
-**Priorität:** MEDIUM - Output
+**Priority:** MEDIUM - Output
 
-#### 8. **test_cli.py** (0% Coverage)
+#### 8. **test_cli.py** (0% coverage)
 ```python
-# Benötigt:
-❌ main() Argument-Parsing
+# Needed:
+❌ main() argument parsing
 ❌ Command execution (--help, --version)
 ❌ File path validation
 ❌ Error handling
 ```
 
-**Priorität:** MEDIUM - User-Interface
+**Priority:** MEDIUM - User Interface
 
-## 🔧 Test-Fixtures Best Practices
+## 🔧 Test Fixtures Best Practices
 
-### Robuste AnnData-Generierung
+### Robust AnnData generation
 
 ```python
 @pytest.fixture
 def realistic_adata():
-    """Erstellt AnnData mit realistischen QC-Metriken"""
+    """Create AnnData with realistic QC metrics."""
     n_obs, n_vars = 200, 100
     X = np.random.negative_binomial(5, 0.3, (n_obs, n_vars))
     
@@ -207,18 +207,18 @@ def realistic_adata():
         }, index=[f'gene_{i}' for i in range(n_vars)])
     )
     
-    # Preprocessing für Tests
+    # Preprocessing for tests
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
-    sc.pp.pca(adata, n_comps=min(30, n_obs-1, n_vars-1))
+    sc.pp.pca(adata, n_comps=min(30, n_obs - 1, n_vars - 1))
     sc.pp.neighbors(adata)
     
     return adata
 ```
 
-## 📈 Roadmap zu 90%+ Coverage
+## 📈 Roadmap to 90%+ Coverage
 
-### Phase 1: Kritische Module (Woche 1)
+### Phase 1: Critical modules (Week 1)
 ```
 ✅ config.py (97.78%)
 ✅ vae.py (100%)
@@ -226,75 +226,75 @@ def realistic_adata():
 🔄 pipeline.py (9.18% → 90%+)
 ```
 
-### Phase 2: Integration (Woche 2)
+### Phase 2: Integration (Week 2)
 ```
 🔄 preprocessing.py (81% → 90%+)
 🔄 clustering.py (41.82% → 90%+)
 🔄 visualization.py (14.63% → 90%+)
 ```
 
-### Phase 3: User-Interface (Woche 3)
+### Phase 3: User Interface (Week 3)
 ```
 🔄 cli.py (0% → 90%+)
 📝 Integration tests
-📝 End-to-End tests
+📝 End-to-end tests
 ```
 
-### Phase 4: Polish (Woche 4)
+### Phase 4: Polish (Week 4)
 ```
 📝 Performance tests
 📝 Edge case hardening
 📝 Documentation updates
-🎉 90%+ Coverage erreicht!
+🎉 90%+ coverage reached!
 ```
 
-## 🛠️ Debugging fehlgeschlagener Tests
+## 🛠️ Debugging failed tests
 
 ### Problem: "Empty data after filtering"
 
 ```python
-# Fehlerursache
+# Root cause
 def test_preprocessing():
-    adata = ad.AnnData(X=np.random.rand(100, 50))  # ❌ Zu simpel
-    result = enhanced_preprocessing(adata)  # Filtert alles raus!
+    adata = ad.AnnData(X=np.random.rand(100, 50))  # ❌ Too simple
+    result = enhanced_preprocessing(adata)  # Filters everything out!
 
-# Lösung
+# Fix
 def test_preprocessing():
-    adata = create_realistic_adata()  # ✅ Mit QC-Metriken
+    adata = create_realistic_adata()  # ✅ With QC metrics
     result = enhanced_preprocessing(adata)
 ```
 
 ### Problem: "KeyError: 'X_pca'"
 
 ```python
-# Fehlerursache
+# Root cause
 def test_clustering():
     adata = ad.AnnData(X=np.random.rand(100, 50))
-    optimized_leiden_clustering(adata)  # ❌ Kein PCA
+    optimized_leiden_clustering(adata)  # ❌ No PCA
 
-# Lösung
+# Fix
 def test_clustering():
-    adata = create_realistic_adata()  # ✅ Mit PCA/neighbors
+    adata = create_realistic_adata()  # ✅ With PCA/neighbors
     optimized_leiden_clustering(adata)
 ```
 
-## 📊 Coverage-Report generieren
+## 📊 Generate a coverage report
 
 ```bash
-# Terminal-Report
+# Terminal report
 pytest --cov=src/scvae_annotator --cov-report=term-missing
 
-# HTML-Report (empfohlen!)
+# HTML report (recommended!)
 pytest --cov=src/scvae_annotator --cov-report=html
-# Öffne: htmlcov/index.html
+# Open: htmlcov/index.html
 
-# XML für CI/CD
+# XML for CI/CD
 pytest --cov=src/scvae_annotator --cov-report=xml
 ```
 
 ## 🎯 CI/CD Integration
 
-### GitHub Actions Workflow (geplant)
+### GitHub Actions workflow (planned)
 
 ```yaml
 name: Tests
@@ -324,7 +324,7 @@ jobs:
         uses: codecov/codecov-action@v3
 ```
 
-## 📚 Weitere Ressourcen
+## 📚 Additional resources
 
 - [pytest Documentation](https://docs.pytest.org/)
 - [pytest-cov Plugin](https://pytest-cov.readthedocs.io/)
@@ -333,4 +333,4 @@ jobs:
 
 ---
 
-**Stand:** 31.10% Coverage | **Ziel:** 90%+ | **Status:** 🚧 In Progress
+**Current:** 31.10% coverage | **Target:** 90%+ | **Status:** 🚧 In Progress
