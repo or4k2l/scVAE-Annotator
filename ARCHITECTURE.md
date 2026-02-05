@@ -1,6 +1,6 @@
-# scVAE-Annotator Architektur
+# scVAE-Annotator Architecture
 
-## Modulübersicht
+## Module Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -45,13 +45,13 @@
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Datenfluss
+## Data Flow
 
 ```
 1. CLI / Python API
         │
         ▼
-2. Config erstellen
+2. Create config
         │
         ▼
 3. Data Loading & Preprocessing
@@ -80,58 +80,58 @@
         ▼
 8. Results & Reports
    └─ annotated_data.h5ad
-   └─ Plots (UMAP, Confusion Matrix)
+        └─ Plots (UMAP, confusion matrix)
    └─ Metrics (JSON, CSV)
 ```
 
-## Modul-Verantwortlichkeiten
+## Module Responsibilities
 
-| Modul | Verantwortung | LoC |
+| Module | Responsibility | LoC |
 |-------|--------------|-----|
-| `config.py` | Konfiguration, Parameter, Logging | 102 |
-| `preprocessing.py` | Datenverarbeitung, QC, Normalisierung | 132 |
-| `clustering.py` | Leiden-Clustering, Metrik-Optimierung | 75 |
-| `vae.py` | VAE-Architektur, Training, Early-Stopping | 173 |
-| `annotator.py` | Klassifikation, Optuna, Calibration | 230 |
-| `visualization.py` | UMAP-Plots, Confidence-Plots | 54 |
-| `pipeline.py` | Orchestrierung, Evaluation | 255 |
-| `cli.py` | Command-Line Interface | 152 |
-| `__init__.py` | Paket-Exports | 75 |
-| `__main__.py` | Python-Modul-Einstieg | 8 |
+| `config.py` | Configuration, parameters, logging | 102 |
+| `preprocessing.py` | Data processing, QC, normalization | 132 |
+| `clustering.py` | Leiden clustering, metric optimization | 75 |
+| `vae.py` | VAE architecture, training, early stopping | 173 |
+| `annotator.py` | Classification, Optuna, calibration | 230 |
+| `visualization.py` | UMAP plots, confidence plots | 54 |
+| `pipeline.py` | Orchestration, evaluation | 255 |
+| `cli.py` | Command-line interface | 152 |
+| `__init__.py` | Package exports | 75 |
+| `__main__.py` | Python module entry point | 8 |
 | **TOTAL** | | **1256** |
 
-## Vergleich: Vorher vs. Nachher
+## Comparison: Before vs. After
 
-### Vorher (Monolith)
+### Before (Monolith)
 ```
-scvae_annotator.py (997 Zeilen) ❌
-└─ Alles in einer Datei
+scvae_annotator.py (997 lines) ❌
+└─ Everything in one file
 ```
 
-### Nachher (Modular)
+### After (Modular)
 ```
 src/scvae_annotator/ ✅
-├── config.py        (102 Zeilen)
-├── preprocessing.py (132 Zeilen)
-├── clustering.py    ( 75 Zeilen)
-├── vae.py          (173 Zeilen)
-├── annotator.py    (230 Zeilen)
-├── visualization.py ( 54 Zeilen)
-├── pipeline.py     (255 Zeilen)
-├── cli.py          (152 Zeilen)
-├── __init__.py     ( 75 Zeilen)
-└── __main__.py     (  8 Zeilen)
+├── config.py        (102 lines)
+├── preprocessing.py (132 lines)
+├── clustering.py    ( 75 lines)
+├── vae.py          (173 lines)
+├── annotator.py    (230 lines)
+├── visualization.py ( 54 lines)
+├── pipeline.py     (255 lines)
+├── cli.py          (152 lines)
+├── __init__.py     ( 75 lines)
+└── __main__.py     (  8 lines)
 ```
 
-## Vorteile der neuen Architektur
+## Benefits of the New Architecture
 
-✅ **Separation of Concerns**: Jedes Modul hat eine klare Aufgabe  
-✅ **Testbarkeit**: Module können einzeln getestet werden  
-✅ **Wiederverwendbarkeit**: Module können in anderen Projekten genutzt werden  
-✅ **Wartbarkeit**: Kleinere Dateien sind einfacher zu verstehen  
-✅ **Erweiterbarkeit**: Neue Features einfach hinzuzufügen  
-✅ **Type-Safety**: Bessere IDE-Unterstützung  
-✅ **Performance**: Optimierte Imports  
+✅ **Separation of concerns**: Each module has a clear role  
+✅ **Testability**: Modules can be tested in isolation  
+✅ **Reusability**: Modules can be reused in other projects  
+✅ **Maintainability**: Smaller files are easier to understand  
+✅ **Extensibility**: New features are easy to add  
+✅ **Type safety**: Better IDE support  
+✅ **Performance**: Optimized imports  
 
 ## Installation
 
@@ -139,7 +139,7 @@ src/scvae_annotator/ ✅
 pip install -e .
 ```
 
-## Verwendung
+## Usage
 
 ### Python API
 ```python
@@ -154,7 +154,7 @@ adata = run_annotation_pipeline(config)
 scvae-annotate --data data.h5 --annotations annotations.csv
 ```
 
-### Python Modul
+### Python Module
 ```bash
 python -m scvae_annotator --data data.h5
 ```
