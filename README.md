@@ -63,7 +63,7 @@ adata = run_annotation_pipeline(config, adata=adata)
 - ✅ Cell Ranger H5 files (`.h5`)
 - ✅ Pre-processed H5AD files (`.h5ad`)
 
-**Try it now:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo.ipynb)
+**Try it now:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo1.ipynb)
 
 📖 **Full guide:** [10x Genomics Integration Guide](docs/10X_GENOMICS_GUIDE.md)
 
@@ -153,7 +153,7 @@ results = run_annotation_pipeline(config, data_path='10x_data/')
 
 ### MSE vs Poisson Comparison
 
-See our [Google Colab demo](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo.ipynb) for an interactive comparison showing:
+See our [Google Colab demo](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo1.ipynb) for an interactive comparison showing:
 - Performance differences on PBMC data
 - Biological validation with canonical markers
 - Interactive visualizations

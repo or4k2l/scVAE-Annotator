@@ -357,7 +357,7 @@ adata.layers['counts'] = raw_counts
 ## 🎓 Further Reading
 
 ### Tutorials
-- [Colab Interactive Demo](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo.ipynb)
+- [Colab Interactive Demo](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo1.ipynb)
 - [10x Genomics Guide](10X_GENOMICS_GUIDE.md)
 
 ### Theoretical Background

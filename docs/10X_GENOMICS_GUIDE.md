@@ -53,7 +53,7 @@ adata = run_annotation_pipeline(
 
 Try it instantly in Google Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/or4k2l/scVAE-Annotator/blob/main/examples/colab_10x_demo1.ipynb)
 
 ## Feature Preservation
 
@@ -144,7 +144,7 @@ adata.var_names_make_unique()
 ## Examples
 
 See `examples/` directory for more:
-- `examples/colab_10x_demo.ipynb` - Interactive Colab demo
+- `examples/colab_10x_demo1.ipynb` - Interactive Colab demo
 - `examples/basic_example.py` - Basic annotation example
 
 ## Support
