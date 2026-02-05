@@ -1,17 +1,17 @@
-# Refactoring-Zusammenfassung: scVAE-Annotator
+# Refactoring Summary: scVAE-Annotator
 
-## Durchgeführte Änderungen
+## Changes Implemented
 
 ### Problem
-Das Projekt befand sich in einem suboptimalen Architektur-Zustand:
-- **Monolith-Datei**: Die gesamte Logik (997 Zeilen) befand sich in `scvae_annotator.py` im Hauptverzeichnis
-- **Anti-Pattern**: Das `src/`-Paket importierte die Monolith-Datei über sys.path Hacks
-- **Wartbarkeit**: Schwierig zu warten, zu testen und zu erweitern
+The project was in a suboptimal architectural state:
+- **Monolith file**: All logic (997 lines) lived in `scvae_annotator.py` at the repository root
+- **Anti-pattern**: The `src/` package imported the monolith via sys.path hacks
+- **Maintainability**: Hard to maintain, test, and extend
 
-### Lösung
-Vollständiges Refactoring in eine saubere, modulare Paketstruktur.
+### Solution
+Full refactoring into a clean, modular package structure.
 
-## Neue Architektur
+## New Architecture
 
 ```
 src/scvae_annotator/
@@ -27,103 +27,103 @@ src/scvae_annotator/
 └── cli.py              # Command-Line Interface
 ```
 
-### Modul-Details
+### Module Details
 
 #### 1. **config.py** (63 Zeilen)
-- `Config` Dataclass mit allen Hyperparametern
-- `create_optimized_config()` für optimierte Standardkonfiguration
-- Zentralisiertes Logging
+- `Config` dataclass with all hyperparameters
+- `create_optimized_config()` for optimized default configuration
+- Centralized logging
 
 #### 2. **preprocessing.py** (143 Zeilen)
-- `discover_marker_genes()` - Automatische Marker-Gen-Erkennung
-- `download_data()` - Daten-Download
-- `load_and_prepare_data()` - Daten laden
-- `enhanced_preprocessing()` - Erweiterte Vorverarbeitung mit Harmony
+- `discover_marker_genes()` - automatic marker gene discovery
+- `download_data()` - data download
+- `load_and_prepare_data()` - data loading
+- `enhanced_preprocessing()` - advanced preprocessing with Harmony
 
 #### 3. **clustering.py** (79 Zeilen)
-- `optimized_leiden_clustering()` - Leiden-Clustering mit adaptiven Metriken
-- Silhouette & ARI-Score-Optimierung
+- `optimized_leiden_clustering()` - Leiden clustering with adaptive metrics
+- Silhouette & ARI score optimization
 
 #### 4. **vae.py** (194 Zeilen)
-- `EarlyStopping` - Early-Stopping-Handler
-- `ImprovedVAE` - VAE mit Batch-Normalisierung und Dropout
-- `improved_vae_loss()` - Beta-VAE-Loss-Funktion
-- `train_improved_vae()` - VAE-Training mit Validation
+- `EarlyStopping` - early stopping handler
+- `ImprovedVAE` - VAE with batch normalization and dropout
+- `improved_vae_loss()` - beta-VAE loss function
+- `train_improved_vae()` - VAE training with validation
 
 #### 5. **annotator.py** (275 Zeilen)
-- `EnhancedAutoencoderAnnotator` - Hauptklasse
-- Optuna-Hyperparameter-Optimierung
-- Kalibrierte Confidence-Scores
-- SMOTE für Klassenbalancierung
+- `EnhancedAutoencoderAnnotator` - main class
+- Optuna hyperparameter optimization
+- Calibrated confidence scores
+- SMOTE for class balancing
 
 #### 6. **visualization.py** (56 Zeilen)
-- `create_visualizations()` - UMAP-Plots
-- Confidence-Analysen
-- Reproduzierbare Visualisierungen
+- `create_visualizations()` - UMAP plots
+- Confidence analysis
+- Reproducible visualizations
 
 #### 7. **pipeline.py** (291 Zeilen)
-- `run_annotation_pipeline()` - Hauptpipeline
-- `evaluate_predictions()` - Evaluierung mit Confusion Matrix
-- `analyze_optimization_results()` - Ergebnisanalyse
+- `run_annotation_pipeline()` - main pipeline
+- `evaluate_predictions()` - evaluation with confusion matrix
+- `analyze_optimization_results()` - result analysis
 
 #### 8. **cli.py** (148 Zeilen)
-- Vollständiges CLI mit argparse
-- Flexible Konfiguration über Command-Line
-- Hilfreiche Beispiele
+- Full CLI with argparse
+- Flexible command-line configuration
+- Helpful examples
 
-## Vorteile des Refactorings
+## Benefits of the Refactor
 
-### ✅ Wartbarkeit
-- **Modularität**: Jedes Modul hat eine klare Verantwortlichkeit
-- **Lesbarkeit**: Kleinere, fokussierte Dateien (56-291 Zeilen)
-- **Testbarkeit**: Module können einzeln getestet werden
+### ✅ Maintainability
+- **Modularity**: Each module has a clear responsibility
+- **Readability**: Smaller, focused files (56-291 lines)
+- **Testability**: Modules can be tested in isolation
 
-### ✅ Erweiterbarkeit
-- **Neue Features**: Einfach neue Module hinzufügen
-- **Alternative Implementierungen**: Z.B. andere VAE-Architekturen
-- **Plugin-System**: Modulare Struktur ermöglicht Plugins
+### ✅ Extensibility
+- **New features**: Easy to add new modules
+- **Alternative implementations**: e.g., other VAE architectures
+- **Plugin system**: Modular structure enables plugins
 
-### ✅ Professionalität
-- **Standard Python-Paketstruktur**: `src/`-Layout
-- **Saubere Importe**: Keine sys.path Hacks
-- **PEP 561 kompatibel**: Type-Hints werden korrekt exportiert
+### ✅ Professionalism
+- **Standard Python package structure**: `src/` layout
+- **Clean imports**: No sys.path hacks
+- **PEP 561 compatible**: Type hints are exported correctly
 
 ### ✅ Installation
-- **pip-installierbar**: `pip install -e .`
-- **CLI-Tool**: `scvae-annotate` Befehl verfügbar
-- **Python-Modul**: `python -m scvae_annotator`
+- **pip-installable**: `pip install -e .`
+- **CLI tool**: `scvae-annotate` command available
+- **Python module**: `python -m scvae_annotator`
 
-## Migration für Benutzer
+## User Migration
 
-### Vorher (Alt)
+### Before (Old)
 ```python
-# Musste sys.path manipulieren
+# Had to manipulate sys.path
 import sys
 sys.path.insert(0, '/path/to/root')
 from scvae_annotator import Config, run_annotation_pipeline
 ```
 
-### Nachher (Neu)
+### After (New)
 ```python
-# Sauberer Import aus installiertem Paket
+# Clean import from the installed package
 from scvae_annotator import Config, run_annotation_pipeline
 
-# Oder spezifische Module
+# Or specific modules
 from scvae_annotator.config import create_optimized_config
 from scvae_annotator.vae import ImprovedVAE
 ```
 
-## Kompatibilität
+## Compatibility
 
-### ✅ Vollständig kompatibel
-- Alle Funktionen aus der alten Version sind verfügbar
-- Gleiche API-Signaturen
-- Gleiche Funktionalität
+### ✅ Fully compatible
+- All functions from the old version are available
+- Same API signatures
+- Same functionality
 
-### 📝 Kleine Änderungen
-- Import-Pfade sind jetzt sauber (keine sys.path Hacks)
-- CLI hat mehr Optionen
-- Konfiguration ist expliziter
+### 📝 Minor changes
+- Import paths are now clean (no sys.path hacks)
+- CLI has more options
+- Configuration is more explicit
 
 ## Installation & Test
 
@@ -132,37 +132,37 @@ from scvae_annotator.vae import ImprovedVAE
 cd /workspaces/scVAE-Annotator
 pip install -e .
 
-# Test der Importe
+# Test imports
 python -c "from scvae_annotator import Config, create_optimized_config; print('✅ OK')"
 
-# CLI testen
+# Test CLI
 scvae-annotate --help
 
-# Python-Modul testen
+# Test Python module
 python -m scvae_annotator --help
 ```
 
-## Nächste Schritte
+## Next Steps
 
-### Empfohlene Verbesserungen
-1. **Tests erweitern**: Unit-Tests für alle Module
-2. **Dokumentation**: Sphinx-Dokumentation hinzufügen
-3. **Type-Hints**: Vollständige Type-Hints für alle Funktionen
-4. **CI/CD**: GitHub Actions für automatische Tests
-5. **Beispiele**: Mehr Jupyter Notebooks
+### Recommended improvements
+1. **Expand tests**: Unit tests for all modules
+2. **Documentation**: Add Sphinx documentation
+3. **Type hints**: Complete type hints for all functions
+4. **CI/CD**: GitHub Actions for automated tests
+5. **Examples**: More Jupyter notebooks
 
 ### Optional
-- Konfiguration via YAML/JSON-Dateien
-- Logging-Level über CLI konfigurierbar
-- Checkpoint-System für lange Trainingsläufe
-- Progress-Bars für alle Schritte
+- Configuration via YAML/JSON files
+- Configurable logging level via CLI
+- Checkpoint system for long training runs
+- Progress bars for all steps
 
-## Zusammenfassung
+## Summary
 
-✅ **Erfolgreich refactored**: Von 997-Zeilen Monolith zu 8 fokussierten Modulen  
-✅ **Installierbar**: Saubere pip-Installation  
-✅ **Professionell**: Moderne Python-Paketstruktur  
-✅ **Wartbar**: Klare Modul-Verantwortlichkeiten  
-✅ **Erweiterbar**: Einfache Integration neuer Features  
+✅ **Successfully refactored**: From a 997-line monolith to 8 focused modules  
+✅ **Installable**: Clean pip installation  
+✅ **Professional**: Modern Python package structure  
+✅ **Maintainable**: Clear module responsibilities  
+✅ **Extensible**: Easy integration of new features  
 
-Das Projekt ist nun production-ready und folgt Best Practices der Python-Community! 🎉
+The project is now production-ready and follows Python community best practices! 🎉
