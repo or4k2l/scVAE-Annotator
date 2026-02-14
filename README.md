@@ -308,6 +308,7 @@ The pipeline generates the following outputs in `output_dir`:
 - **VAE Training**: **40% faster** with early stopping
 - **Cell Types Identified**: 10 distinct populations
 - **Generalization**: Robust cross-dataset performance validated
+
 🔬 **[View Validation Report](VALIDATION_REPORT.md)** for cross-dataset generalization analysis.
 
 <img width="4770" height="3566" alt="umap_comparison" src="https://github.com/user-attachments/assets/00e462c0-d9a2-4315-a4a0-7dfe46c08748" />
