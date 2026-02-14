@@ -24,6 +24,9 @@ scVAE-Annotator is an optimized pipeline for automated cell type annotation in s
 - **Calibrated confidence scores** for predictions
 - **Adaptive marker gene discovery**
 
+scVAE-Annotator trades peak accuracy for epistemic caution.
+Cells with ambiguous transcriptional identity are explicitly flagged as uncertain rather than force-assigned, indicating that lower accuracy does not necessarily imply reduced biological relevance.
+
 ## ✨ Key Features
 
 - ✅ **Adaptive marker gene discovery** based on ground truth data
