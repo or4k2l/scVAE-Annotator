@@ -14,14 +14,6 @@ Cells with ambiguous transcriptional identity are explicitly flagged as uncertai
 [![mypy](https://img.shields.io/badge/mypy-strict-blue.svg)](pyproject.toml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-"scVAE-Annotator vs. scANVI Benchmarking (Paul15 Dataset): Our model achieves competitive accuracy (95.7%) while being significantly more efficient. By utilizing Early Stopping, scVAE-Annotator converged in just 34 epochs compared to 200 epochs required by scANVI. Additionally, scVAE-Annotator provides an integrated Confidence Scoring system to identify ambiguous cell states, a feature lacking in traditional semi-supervised models."
-
-<img width="2258" height="989" alt="Herunterladen (11)" src="https://github.com/user-attachments/assets/40922dd2-53f4-4b87-969f-44cca96051dc" />
-
-scVAE-Annotator’s uncertainty scores correlate with marker expression strength, suggesting that low confidence reflects biological ambiguity rather than annotation error.
-
-Performance differences between scVAE-Annotator and scANVI are largely confined to low marker-coverage cells; in high-signal regimes, both models converge to near-identical accuracy, while scVAE uniquely exposes biological ambiguity through explicit uncertainty.
-
 ## 🎯 Overview
 
 scVAE-Annotator is an optimized pipeline for automated cell type annotation in single-cell RNA-seq data. It combines:
@@ -308,8 +300,6 @@ The pipeline generates the following outputs in `output_dir`:
 
 <img width="4768" height="3566" alt="umap_comparison" src="https://github.com/user-attachments/assets/12ff79a5-163c-4827-9273-aa8d0d672171" />
 
-<img width="4770" height="3566" alt="umap_comparison" src="https://github.com/user-attachments/assets/00e462c0-d9a2-4315-a4a0-7dfe46c08748" />
-
 ### PBMC 3k Dataset (Cross-Dataset Validation)
 
 - **Accuracy**: **93.01%** (93.6% retention from PBMC 10k)
@@ -319,7 +309,17 @@ The pipeline generates the following outputs in `output_dir`:
 - **Cell Types Identified**: 10 distinct populations
 - **Generalization**: Robust cross-dataset performance validated
 
+<img width="4770" height="3566" alt="umap_comparison" src="https://github.com/user-attachments/assets/00e462c0-d9a2-4315-a4a0-7dfe46c08748" />
+
 🔬 **[View Validation Report](VALIDATION_REPORT.md)** for cross-dataset generalization analysis.
+
+"scVAE-Annotator vs. scANVI Benchmarking (Paul15 Dataset): Our model achieves competitive accuracy (95.7%) while being significantly more efficient. By utilizing Early Stopping, scVAE-Annotator converged in just 34 epochs compared to 200 epochs required by scANVI. Additionally, scVAE-Annotator provides an integrated Confidence Scoring system to identify ambiguous cell states, a feature lacking in traditional semi-supervised models."
+
+<img width="2258" height="989" alt="Herunterladen (11)" src="https://github.com/user-attachments/assets/40922dd2-53f4-4b87-969f-44cca96051dc" />
+
+scVAE-Annotator’s uncertainty scores correlate with marker expression strength, suggesting that low confidence reflects biological ambiguity rather than annotation error.
+
+Performance differences between scVAE-Annotator and scANVI are largely confined to low marker-coverage cells; in high-signal regimes, both models converge to near-identical accuracy, while scVAE uniquely exposes biological ambiguity through explicit uncertainty.
 
 ## 🤝 Contributing
 
