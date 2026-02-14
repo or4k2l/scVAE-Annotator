@@ -1,8 +1,3 @@
-<p align="center">
-<strong>scVAE-Annotator trades peak accuracy for epistemic caution.</strong><br/>
-Cells with ambiguous transcriptional identity are explicitly flagged as uncertain rather than force-assigned, indicating that lower accuracy does not necessarily imply reduced biological relevance.
-</p>
-
 # scVAE-Annotator
 
 **Advanced Single-Cell RNA-seq Annotation Pipeline with VAE and Automated Hyperparameter Optimization**
@@ -319,6 +314,8 @@ The pipeline generates the following outputs in `output_dir`:
 "scVAE-Annotator vs. scANVI Benchmarking (Paul15 Dataset): Our model achieves competitive accuracy (95.7%) while being significantly more efficient. By utilizing Early Stopping, scVAE-Annotator converged in just 34 epochs compared to 200 epochs required by scANVI. Additionally, scVAE-Annotator provides an integrated Confidence Scoring system to identify ambiguous cell states, a feature lacking in traditional semi-supervised models."
 
 <img width="2258" height="989" alt="Herunterladen (11)" src="https://github.com/user-attachments/assets/40922dd2-53f4-4b87-969f-44cca96051dc" />
+
+All experiments were conducted using fixed random seeds and fully reproducible pipelines; results can be regenerated using the provided scripts.
 
 scVAE-Annotator’s uncertainty scores correlate with marker expression strength, suggesting that low confidence reflects biological ambiguity rather than annotation error.
 
