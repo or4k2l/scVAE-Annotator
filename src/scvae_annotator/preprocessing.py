@@ -3,6 +3,10 @@ Preprocessing functions for scVAE-Annotator.
 """
 
 import os
+import shutil
+import urllib.request
+import zipfile
+from pathlib import Path
 from typing import List, Dict, Any
 
 import anndata as ad
@@ -46,26 +50,38 @@ def discover_marker_genes(adata: ad.AnnData, config: Config) -> List[str]:
 
 
 def download_data() -> None:
-    """Download required data files with error handling."""
-    from pathlib import Path
-    
+    """Download required data files and extract their annotations."""
     urls_and_paths = [
         ('https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5',
-         './data/10x-Multiome-Pbmc10k-RNA.h5'),
+         Path('data/10x-Multiome-Pbmc10k-RNA.h5')),
         ('https://www.dropbox.com/s/3g63m832mbeec4s/PBMC10k_multiome_vPBMCatlas.zip?dl=1',
-         './data/PBMC10k_multiome_vPBMCatlas.zip')
+         Path('data/PBMC10k_multiome_vPBMCatlas.zip'))
     ]
 
-    Path('./data').mkdir(parents=True, exist_ok=True)
+    data_dir = Path('data')
+    data_dir.mkdir(parents=True, exist_ok=True)
 
     for url, path in urls_and_paths:
-        if not os.path.exists(path):
-            logger.info(f"Downloading {url}")
-            os.system(f'wget -O {path} "{url}"')
+        if not path.exists():
+            logger.info(f"Downloading {url} to {path}")
+            urllib.request.urlretrieve(url, path)
 
-    if not os.path.exists('./data/pbmc10k_annotations.csv'):
-        os.system('unzip -o ./data/PBMC10k_multiome_vPBMCatlas.zip -d ./data/')
-        os.system('mv ./data/PBMC10k_multiome_vPBMCatlas/Seurat_RNA_annotation.csv ./data/pbmc10k_annotations.csv')
+    annotations_path = data_dir / 'pbmc10k_annotations.csv'
+    zip_path = data_dir / 'PBMC10k_multiome_vPBMCatlas.zip'
+    if not annotations_path.exists() and zip_path.exists():
+        logger.info("Extracting annotations from zip...")
+        with zipfile.ZipFile(zip_path) as archive:
+            annotation_files = [
+                member for member in archive.namelist()
+                if member.endswith('Seurat_RNA_annotation.csv')
+            ]
+            if not annotation_files:
+                raise FileNotFoundError(
+                    f"Seurat_RNA_annotation.csv was not found in {zip_path}"
+                )
+            with archive.open(annotation_files[0]) as source, annotations_path.open('wb') as target:
+                shutil.copyfileobj(source, target)
+        logger.info("Annotations extracted successfully")
 
 
 def load_and_prepare_data(data_path: str = './data/10x-Multiome-Pbmc10k-RNA.h5') -> ad.AnnData:
