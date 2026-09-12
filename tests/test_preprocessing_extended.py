@@ -8,6 +8,7 @@ import scanpy as sc
 import anndata as ad
 import pandas as pd
 import tempfile
+import zipfile
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
@@ -97,32 +98,53 @@ class TestDiscoverMarkerGenes:
 class TestDownloadData:
     """Test suite for download_data function."""
 
-    @patch('os.system')
-    @patch('os.path.exists')
+    @patch('scvae_annotator.preprocessing.urllib.request.urlretrieve')
     def test_download_data_when_missing(
-        self, mock_exists: MagicMock, mock_system: MagicMock
+        self, mock_download: MagicMock, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
     ) -> None:
         """Test data download when files are missing."""
-        mock_exists.return_value = False
-        
-        download_data()
-        
-        # Should have called wget
-        assert mock_system.call_count >= 2
+        monkeypatch.chdir(tmp_path)
 
-    @patch('os.system')
-    @patch('os.path.exists')
+        download_data()
+
+        assert mock_download.call_count == 2
+
+    @patch('scvae_annotator.preprocessing.urllib.request.urlretrieve')
     def test_download_data_when_exists(
-        self, mock_exists: MagicMock, mock_system: MagicMock
+        self, mock_download: MagicMock, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
     ) -> None:
         """Test data download when files already exist."""
-        mock_exists.return_value = True
-        
+        data_dir = tmp_path / 'data'
+        data_dir.mkdir()
+        (data_dir / '10x-Multiome-Pbmc10k-RNA.h5').touch()
+        (data_dir / 'PBMC10k_multiome_vPBMCatlas.zip').touch()
+        (data_dir / 'pbmc10k_annotations.csv').touch()
+        monkeypatch.chdir(tmp_path)
+
         download_data()
-        
-        # Should not download if files exist
-        # But might still unzip annotations
-        assert mock_system.call_count <= 2
+
+        mock_download.assert_not_called()
+
+    @patch('scvae_annotator.preprocessing.urllib.request.urlretrieve')
+    def test_download_data_extracts_annotations(
+        self, mock_download: MagicMock, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """Test that annotations are extracted without shell commands."""
+        data_dir = tmp_path / 'data'
+        data_dir.mkdir()
+        (data_dir / '10x-Multiome-Pbmc10k-RNA.h5').touch()
+        zip_path = data_dir / 'PBMC10k_multiome_vPBMCatlas.zip'
+        with zipfile.ZipFile(zip_path, 'w') as archive:
+            archive.writestr(
+                'PBMC10k_multiome_vPBMCatlas/Seurat_RNA_annotation.csv',
+                'cell_type\nT cell\n',
+            )
+        monkeypatch.chdir(tmp_path)
+
+        download_data()
+
+        mock_download.assert_not_called()
+        assert (data_dir / 'pbmc10k_annotations.csv').read_text() == 'cell_type\nT cell\n'
 
 
 class TestLoadAndPrepareData:
